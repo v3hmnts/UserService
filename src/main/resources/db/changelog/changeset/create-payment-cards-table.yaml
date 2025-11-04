@@ -1,0 +1,81 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-payment-cards-table
+      author: Vhmnts
+      changes:
+        - createTable:
+            tableName: payment_cards
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_user_id
+              - column:
+                  name: number
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: holder
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+              - column:
+                  name: expiration_date
+                  type: DATE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: active
+                  type: BOOLEAN
+                  constraints:
+                  nullable: false
+              - column:
+                  name: CreatedAt
+                  type: TIMESTAMP
+                  defaultValueComputed: now
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: UpdatedAt
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: addUserIdFK
+      author: Vhmnts
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: payment_cards
+            baseTableSchemaName: public
+            constraintName: fk_user_id
+            deferrable: true
+            initiallyDeferred: true
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: users
+            referencedTableSchemaName: public
+            validate: true
+  - changeSet:
+      id: createIndexForFK
+      author: Vhmnts
+      changes:
+        - createIndex:
+            columns:
+              - column:
+                  name: user_id
+            indexName: idx_payment_cards_user_id
+            schemaName: public
+            tableName: payment_cards

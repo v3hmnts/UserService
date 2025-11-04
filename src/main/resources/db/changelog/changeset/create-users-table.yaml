@@ -1,0 +1,51 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-users-table
+      author: Vhmnts
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+              - column:
+                  name: surname
+                  type: VARCHAR
+                  constraints:
+                    nullable: false
+              - column:
+                  name: birth_date
+                  type: DATE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: CITEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: active
+                  type: BOOLEAN
+                  constraints:
+                  nullable: false
+              - column:
+                  name: CreatedAt
+                  type: TIMESTAMP
+                  defaultValueComputed: now
+                  constraints:
+                    nullable: false
+              - column:
+                  name: UpdatedAt
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
