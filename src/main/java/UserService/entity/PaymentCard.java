@@ -1,10 +1,12 @@
-package UserService.Entity;
+package UserService.entity;
 
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -36,9 +38,11 @@ public class PaymentCard {
     private boolean active;
 
     @Column(name = "created_at")
+    @CreatedDate
     private Timestamp createdAt;
 
     @Column(name = "updated_at")
+    @LastModifiedDate
     private Timestamp updatedAt;
 
 }
