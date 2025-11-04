@@ -30,22 +30,23 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: email
-                  type: CITEXT
+                  type: VARCHAR
                   constraints:
                     nullable: false
               - column:
                   name: active
                   type: BOOLEAN
                   constraints:
-                  nullable: false
+                    nullable: false
               - column:
-                  name: CreatedAt
+                  name: created_at
                   type: TIMESTAMP
-                  defaultValueComputed: now
+                  defaultValueComputed: CURRENT_TIMESTAMP
                   constraints:
                     nullable: false
               - column:
-                  name: UpdatedAt
+                  name: updated_at
                   type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
                   constraints:
                     nullable: false

@@ -38,17 +38,17 @@ databaseChangeLog:
                   name: active
                   type: BOOLEAN
                   constraints:
-                  nullable: false
+                    nullable: false
               - column:
-                  name: CreatedAt
+                  name: created_at
                   type: TIMESTAMP
-                  defaultValueComputed: now
+                  defaultValueComputed: CURRENT_TIMESTAMP
                   constraints:
                     nullable: false
-
               - column:
-                  name: UpdatedAt
+                  name: updated_at
                   type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
                   constraints:
                     nullable: false
   - changeSet:
@@ -58,7 +58,7 @@ databaseChangeLog:
         - addForeignKeyConstraint:
             baseColumnNames: user_id
             baseTableName: payment_cards
-            baseTableSchemaName: public
+            baseTableSchemaName: user_service
             constraintName: fk_user_id
             deferrable: true
             initiallyDeferred: true
@@ -66,7 +66,7 @@ databaseChangeLog:
             onUpdate: RESTRICT
             referencedColumnNames: id
             referencedTableName: users
-            referencedTableSchemaName: public
+            referencedTableSchemaName: user_service
             validate: true
   - changeSet:
       id: createIndexForFK
@@ -77,5 +77,5 @@ databaseChangeLog:
               - column:
                   name: user_id
             indexName: idx_payment_cards_user_id
-            schemaName: public
+            schemaName: user_service
             tableName: payment_cards
