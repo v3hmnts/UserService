@@ -2,6 +2,11 @@ databaseChangeLog:
   - changeSet:
       id: create-users-table
       author: Vhmnts
+      preconditions:
+        - onFail: MARK_RAN
+          not:
+            - tableExists:
+                tableName: users
       changes:
         - createTable:
             tableName: users
@@ -15,12 +20,12 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: name
-                  type: VARCHAR
+                  type: VARCHAR(100)
                   constraints:
                     nullable: false
               - column:
                   name: surname
-                  type: VARCHAR
+                  type: VARCHAR(100)
                   constraints:
                     nullable: false
               - column:
@@ -30,7 +35,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: email
-                  type: VARCHAR
+                  type: VARCHAR(255)
                   constraints:
                     nullable: false
               - column:
