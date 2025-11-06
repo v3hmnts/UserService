@@ -8,14 +8,15 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: BIGINT
-                  autoIncrement: true
+                  type: UUID
+                  autoIncrement: false
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
                   name: user_id
-                  type: BIGINT
+                  type: UUID
+                  autoIncrement: false
                   constraints:
                     nullable: false
                     foreignKeyName: fk_user_id
