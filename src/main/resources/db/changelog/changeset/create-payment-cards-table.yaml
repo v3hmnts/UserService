@@ -24,6 +24,7 @@ databaseChangeLog:
                   type: BIGINT
                   constraints:
                     nullable: false
+                    unique: true
               - column:
                   name: holder
                   type: VARCHAR

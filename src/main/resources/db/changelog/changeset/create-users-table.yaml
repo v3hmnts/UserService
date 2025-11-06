@@ -33,6 +33,7 @@ databaseChangeLog:
                   type: VARCHAR
                   constraints:
                     nullable: false
+                    unique: true
               - column:
                   name: active
                   type: BOOLEAN
