@@ -17,7 +17,6 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
 @EntityListeners(AuditingEntityListener.class)
 public class PaymentCard {
 
@@ -54,4 +53,21 @@ public class PaymentCard {
     @LastModifiedDate
     private Timestamp updatedAt;
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (!(obj instanceof PaymentCard))
+            return false;
+
+        PaymentCard other = (PaymentCard) obj;
+
+        return id != null &&
+                id.equals(other.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

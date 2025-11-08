@@ -88,4 +88,22 @@ public class User {
         paymentCard.setUser(null);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (!(obj instanceof User))
+            return false;
+
+        User other = (User) obj;
+
+        return id != null &&
+                id.equals(other.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
+
 }
