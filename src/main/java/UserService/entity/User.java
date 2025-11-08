@@ -2,8 +2,8 @@ package UserService.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -21,9 +21,19 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode
 @EntityListeners(AuditingEntityListener.class)
 public class User {
+
+    public User(UUID id, String name, String surname, Date birthDate, String email, boolean active) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.birthDate = birthDate;
+        this.email = email;
+        this.active = active;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -39,7 +49,7 @@ public class User {
     @Column(name = "surname")
     private String surname;
 
-    @NotBlank(message = "Birth date is mandatory")
+    @Past
     @Column(name = "birth_date")
     private Date birthDate;
 
@@ -48,7 +58,7 @@ public class User {
     @Column(unique = true, name = "email")
     private String email;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<PaymentCard> cards = new ArrayList<>();
 
     @Column(name = "active")
@@ -62,16 +72,18 @@ public class User {
     @LastModifiedDate
     private Timestamp updatedAt;
 
-
     public void addPaymentCard(PaymentCard paymentCard) throws Exception {
-        if(cards.size()>=5){
+        if (this.cards == null) {
+            throw new Exception("User.cards shouldn't be null");
+        }
+        if (this.cards.size() >= 5) {
             throw new Exception("User should have no more than 5 payment cards");
         }
-        cards.add(paymentCard);
+        this.cards.add(paymentCard);
         paymentCard.setUser(this);
     }
 
-    public void removePaymentCard(PaymentCard paymentCard){
+    public void removePaymentCard(PaymentCard paymentCard) {
         cards.remove(paymentCard);
         paymentCard.setUser(null);
     }

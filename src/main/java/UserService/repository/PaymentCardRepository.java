@@ -1,20 +1,31 @@
 package UserService.repository;
 
 import UserService.entity.PaymentCard;
-import org.hibernate.annotations.processing.SQL;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.NativeQuery;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.UUID;
 
-public interface PaymentCardRepository extends JpaRepository<PaymentCard,Long>, JpaSpecificationExecutor<PaymentCard> {
+public interface PaymentCardRepository extends JpaRepository<PaymentCard, UUID>, JpaSpecificationExecutor<PaymentCard> {
 
-    @Query("select pc from PaymentCard pc where pc.user.id=?1")
-    public List<PaymentCard> getAllPaymentCardsByUserId(Long userId);
 
-    @Query(value = "select pc.* from payment_cards pc join users u on pc.user_id=u.id",nativeQuery = true)
-    public List<PaymentCard> findAllWithUsers();
+    @Query(value = "select pc.* from payment_cards pc where pc.user_id=:userId", nativeQuery = true)
+    public List<PaymentCard> findAllPaymentCardsByUserId(@Param("userId") UUID userId);
+
+    @Query(value = "SELECT pc FROM PaymentCard pc LEFT JOIN FETCH User u", countQuery = "SELECT COUNT(pc.id) FROM PaymentCard pc")
+    public List<PaymentCard> findAllWithUsers(Pageable pageable);
+
+    @Modifying
+    @Query(value = "UPDATE PaymentCard pc SET pc.active=false WHERE pc.id=:paymentCardId")
+    public int deactivateCardById(@Param("paymentCardId") UUID paymentCardId);
+
+    @Modifying
+    @Query(value = "UPDATE PaymentCard pc SET pc.active=true WHERE pc.id=:paymentCardId")
+    public int activateCardById(@Param("paymentCardId") UUID paymentCardId);
 
 }
