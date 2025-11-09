@@ -19,6 +19,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @EqualsAndHashCode
 @EntityListeners(AuditingEntityListener.class)
+@ToString
 public class PaymentCard {
 
     @Id
@@ -26,6 +27,8 @@ public class PaymentCard {
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -46,7 +49,7 @@ public class PaymentCard {
     @Column(name = "active")
     private boolean active;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
     @CreatedDate
     private Timestamp createdAt;
 

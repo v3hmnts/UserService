@@ -4,17 +4,18 @@ import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.sql.Date;
 import java.util.UUID;
 
 @Data
-public class PaymentCardDTO {
-
+public class PaymentCardDTOWithUser {
     private UUID id;
 
     @EqualsAndHashCode.Exclude
-    private UUID userId;
+    @ToString.Exclude
+    private UserDTO user;
 
     @Digits(integer = 16, message = "Credit card should have 16 digits number", fraction = 0)
     @Min(value = 1000000000000000L, message = "Credit card should have 16 digits number")
@@ -30,5 +31,4 @@ public class PaymentCardDTO {
 
     @Column(name = "active")
     private boolean active;
-
 }

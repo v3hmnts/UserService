@@ -4,14 +4,18 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.*;
 
 import java.sql.Date;
+import java.util.List;
 import java.util.UUID;
 
-@Data
-public class UserDTO {
-
+@Getter
+@Setter
+@NoArgsConstructor
+@EqualsAndHashCode
+@ToString
+public class UserDTOWIthCards {
     private UUID id;
 
     @NotBlank(message = "Name shouldn't be empty")
@@ -29,6 +33,10 @@ public class UserDTO {
     @Size(min = 6, max = 255, message = "Email length should be between 6 and 255 characters")
     private String email;
 
+    @EqualsAndHashCode.Exclude
+    private List<PaymentCardDTO> cards;
+
     private boolean active;
+
 
 }
