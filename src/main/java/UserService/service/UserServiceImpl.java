@@ -3,6 +3,7 @@ package UserService.service;
 import UserService.DTO.UserDTO;
 import UserService.DTO.UserDTOWIthCards;
 import UserService.entity.User;
+import UserService.exception.EntityNotFoundException;
 import UserService.mapper.CycleAvoidingMappingContext;
 import UserService.mapper.UserMapper;
 import UserService.repository.UserRepository;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.text.MessageFormat;
 import java.util.UUID;
 
 @Service
@@ -39,14 +41,14 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public UserDTO getUserById(UUID userId) {
-        User user = this.userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+    public UserDTO getUserById(UUID userId){
+        User user = this.userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException(String.format("User with id=%s not found",userId)));
         return userMapper.toUserDTO(user);
     }
 
     @Override
-    public UserDTOWIthCards getUserWithCardsById(UUID userId) {
-        User user = this.userRepository.findWithCardsById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+    public UserDTOWIthCards getUserWithCardsById(UUID userId){
+        User user = this.userRepository.findWithCardsById(userId).orElseThrow(() -> new EntityNotFoundException(String.format("User with id=%s not found",userId)));
         return userMapper.toUserDTOWithCards(user, new CycleAvoidingMappingContext());
     }
 
@@ -70,10 +72,8 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional
     public void updateUserById(UUID userId, @NotNull @Valid UserDTO userDTO) {
-        User userToUpdate = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-        System.out.println("USER BEFORE UPDATE : " + userToUpdate);
+        User userToUpdate = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException(String.format("User with id=%s not found",userId)));
         userMapper.updateUserFromDTO(userDTO, userToUpdate);
-        System.out.println("USER AFTER UPDATE : " + userToUpdate);
         userRepository.save(userToUpdate);
     }
 
