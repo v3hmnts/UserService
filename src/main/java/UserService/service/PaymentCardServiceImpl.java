@@ -2,6 +2,7 @@ package UserService.service;
 
 import UserService.DTO.PaymentCardDTO;
 import UserService.entity.PaymentCard;
+import UserService.exception.EntityNotFoundException;
 import UserService.mapper.PaymentCardMapper;
 import UserService.repository.PaymentCardRepository;
 import UserService.specification.PaymentCardFilterRequest;
@@ -39,8 +40,8 @@ public class PaymentCardServiceImpl implements IPaymentCardService {
     }
 
     @Override
-    public PaymentCardDTO getPaymentCardById(UUID paymentCardId) {
-        PaymentCard paymentCard = paymentCardRepository.findById(paymentCardId).orElseThrow(() -> new RuntimeException(String.format("Payment card with  id %s not found", paymentCardId)));
+    public PaymentCardDTO getPaymentCardById(UUID paymentCardId){
+        PaymentCard paymentCard = paymentCardRepository.findById(paymentCardId).orElseThrow(() -> new EntityNotFoundException(String.format("Payment card with id=%s not found", paymentCardId)));
         return paymentCardMapper.toPaymentCardDTO(paymentCard);
     }
 
@@ -58,8 +59,8 @@ public class PaymentCardServiceImpl implements IPaymentCardService {
 
     @Override
     @Transactional
-    public PaymentCardDTO updatePaymentCardById(UUID paymentCardId, @NotNull @Valid PaymentCardDTO paymentCardDTO) {
-        PaymentCard paymentCardToUpdate = paymentCardRepository.findById(paymentCardId).orElseThrow(() -> new RuntimeException(String.format("PaymentCard with id=%s not found", paymentCardId)));
+    public PaymentCardDTO updatePaymentCardById(UUID paymentCardId, @NotNull @Valid PaymentCardDTO paymentCardDTO){
+        PaymentCard paymentCardToUpdate = paymentCardRepository.findById(paymentCardId).orElseThrow(() -> new EntityNotFoundException(String.format("Payment card with id=%s not found", paymentCardId)));
         paymentCardMapper.updateFromDTO(paymentCardDTO, paymentCardToUpdate);
         return paymentCardMapper.toPaymentCardDTO(paymentCardRepository.save(paymentCardToUpdate));
     }

@@ -1,6 +1,5 @@
 package UserService.service;
 
-import UserService.DTO.PaymentCardDTO;
 import UserService.DTO.UserDTO;
 import UserService.DTO.UserDTOWIthCards;
 import UserService.specification.UserFilterRequest;
@@ -12,8 +11,6 @@ import java.util.UUID;
 public interface IUserService {
 
     public UserDTO addUser(UserDTO userDTO);
-
-    public UserDTO addPaymentCardToUser(UUID userId, PaymentCardDTO paymentCardDTO);
 
     public UserDTO getUserById(UUID userId);
 
@@ -30,5 +27,6 @@ public interface IUserService {
     public void deactivateUserById(UUID userId);
 
     public void activateUserById(UUID userId);
+
 
 }
