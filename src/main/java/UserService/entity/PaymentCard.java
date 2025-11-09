@@ -45,7 +45,7 @@ public class PaymentCard {
     @Column(name = "active")
     private boolean active;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at",updatable = false)
     @CreatedDate
     private Timestamp createdAt;
 

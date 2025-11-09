@@ -13,7 +13,6 @@ import java.util.UUID;
 
 public interface PaymentCardRepository extends JpaRepository<PaymentCard, UUID>, JpaSpecificationExecutor<PaymentCard> {
 
-
     @Query(value = "select pc.* from payment_cards pc where pc.user_id=:userId", nativeQuery = true)
     public List<PaymentCard> findAllPaymentCardsByUserId(@Param("userId") UUID userId);
 
