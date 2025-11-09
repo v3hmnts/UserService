@@ -5,6 +5,7 @@ import UserService.DTO.UserDTO;
 import UserService.DTO.UserDTOWIthCards;
 import UserService.entity.PaymentCard;
 import UserService.entity.User;
+import UserService.exception.BusinessRuleConstraintViolationException;
 import UserService.exception.EntityNotFoundException;
 import UserService.mapper.CycleAvoidingMappingContext;
 import UserService.mapper.PaymentCardMapper;
@@ -44,6 +45,9 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional
     public UserDTO addUser(@NotNull @Valid UserDTO userDTO) {
+        userRepository.findByEmail(userDTO.getEmail()).ifPresent(user -> {
+            throw new BusinessRuleConstraintViolationException(String.format("User with email %s already exists. Email should be unique",user.getEmail()));
+        });
         User user = userMapper.toEntity(userDTO);
         return userMapper.toUserDTO(this.userRepository.save(user));
     }
