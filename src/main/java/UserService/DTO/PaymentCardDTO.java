@@ -24,7 +24,7 @@ public class PaymentCardDTO {
     private String holder;
 
     //TODO Think about should it be in future or not
-    @Future
+    @Future(message = "Expiration date should be in future")
     private Date expirationDate;
 
     @Column(name = "active")

@@ -1,35 +1,44 @@
 package UserService.service;
 
+import UserService.DTO.PaymentCardDTO;
 import UserService.DTO.UserDTO;
 import UserService.DTO.UserDTOWIthCards;
+import UserService.entity.PaymentCard;
 import UserService.entity.User;
 import UserService.exception.EntityNotFoundException;
 import UserService.mapper.CycleAvoidingMappingContext;
+import UserService.mapper.PaymentCardMapper;
 import UserService.mapper.UserMapper;
+import UserService.repository.PaymentCardRepository;
 import UserService.repository.UserRepository;
 import UserService.specification.UserFilterRequest;
 import UserService.specification.UserSpecification;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import java.text.MessageFormat;
 import java.util.UUID;
 
 @Service
+@NoArgsConstructor
 public class UserServiceImpl implements IUserService {
 
     UserMapper userMapper;
+    PaymentCardMapper paymentCardMapper;
     UserRepository userRepository;
+    PaymentCardRepository paymentCardRepository;
 
     @Autowired
-    public UserServiceImpl(UserMapper userMapper, UserRepository userRepository) {
+    public UserServiceImpl(UserMapper userMapper, PaymentCardMapper paymentCardMapper, UserRepository userRepository, PaymentCardRepository paymentCardRepository) {
         this.userMapper = userMapper;
+        this.paymentCardMapper = paymentCardMapper;
         this.userRepository = userRepository;
+        this.paymentCardRepository = paymentCardRepository;
     }
 
     @Override
@@ -40,14 +49,14 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public UserDTO getUserById(UUID userId){
-        User user = this.userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException(String.format("User with id=%s not found",userId)));
+    public UserDTO getUserById(UUID userId) {
+        User user = this.userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User", userId.toString()));
         return userMapper.toUserDTO(user);
     }
 
     @Override
-    public UserDTOWIthCards getUserWithCardsById(UUID userId){
-        User user = this.userRepository.findWithCardsById(userId).orElseThrow(() -> new EntityNotFoundException(String.format("User with id=%s not found",userId)));
+    public UserDTOWIthCards getUserWithCardsById(UUID userId) {
+        User user = this.userRepository.findWithCardsById(userId).orElseThrow(() -> new EntityNotFoundException("User", userId.toString()));
         return userMapper.toUserDTOWithCards(user, new CycleAvoidingMappingContext());
     }
 
@@ -62,6 +71,14 @@ public class UserServiceImpl implements IUserService {
         return userPage.map(user -> userMapper.toUserDTO(user));
     }
 
+    @Transactional
+    public UserDTOWIthCards addPaymentCardToUser(UUID userId, @NotNull @Valid PaymentCardDTO paymentCardDTO) {
+        User user = userRepository.findWithCardsById(userId).orElseThrow(() -> new EntityNotFoundException("User", userId.toString()));
+        PaymentCard paymentCard = paymentCardMapper.toEntity(paymentCardDTO);
+        user.addPaymentCard(paymentCard);
+        return userMapper.toUserDTOWithCards(userRepository.save(user), new CycleAvoidingMappingContext());
+    }
+
     public Page<UserDTOWIthCards> getAllUsersWithCardsFilteredBy(UserFilterRequest userFilterRequest, Pageable pageable) {
         Specification<User> specification = userFilterRequest.toSpecification().and(UserSpecification.withPaymentCards());
         Page<User> userPage = this.userRepository.findAll(specification, pageable);
@@ -71,7 +88,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional
     public UserDTO updateUserById(UUID userId, @NotNull @Valid UserDTO userDTO) {
-        User userToUpdate = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException(String.format("User with id=%s not found",userId)));
+        User userToUpdate = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User", userId.toString()));
         userMapper.updateUserFromDTO(userDTO, userToUpdate);
         return userMapper.toUserDTO(userRepository.save(userToUpdate));
     }
