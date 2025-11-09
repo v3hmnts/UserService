@@ -23,6 +23,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+@ToString
 public class User {
 
     @Id
@@ -54,7 +55,8 @@ public class User {
     @Column(name = "active")
     private boolean active;
 
-    @Column(name = "created_at",updatable = false)
+
+    @Column(name = "created_at", updatable = false)
     @CreatedDate
     private Timestamp createdAt;
 
