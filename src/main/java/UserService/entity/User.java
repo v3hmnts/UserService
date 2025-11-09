@@ -24,16 +24,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @EqualsAndHashCode
 @EntityListeners(AuditingEntityListener.class)
+@ToString
 public class User {
-
-    public User(UUID id, String name, String surname, Date birthDate, String email, boolean active) {
-        this.id = id;
-        this.name = name;
-        this.surname = surname;
-        this.birthDate = birthDate;
-        this.email = email;
-        this.active = active;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -64,7 +56,7 @@ public class User {
     @Column(name = "active")
     private boolean active;
 
-    @Column(name = "created_at",updatable = false)
+    @Column(name = "created_at", updatable = false)
     @CreatedDate
     private Timestamp createdAt;
 
