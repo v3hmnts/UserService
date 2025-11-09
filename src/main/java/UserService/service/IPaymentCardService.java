@@ -11,6 +11,8 @@ import java.util.UUID;
 public interface IPaymentCardService {
     public PaymentCardDTO addPaymentCard(PaymentCardDTO paymentCardDTO);
 
+    //public PaymentCardDTO addPaymentCardToUser(UUID userId,PaymentCardDTO paymentCardDTO);
+
     public PaymentCardDTO getPaymentCardById(UUID paymentCardId);
 
     public Page<PaymentCardDTO> getAllPaymentCardsFilteredBy(PaymentCardFilterRequest paymentCardFilterRequest, Pageable pageable);

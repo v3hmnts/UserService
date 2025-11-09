@@ -39,9 +39,10 @@ public class PaymentCardServiceImpl implements IPaymentCardService {
         return paymentCardMapper.toPaymentCardDTO(paymentCardRepository.save(paymentCard));
     }
 
+
     @Override
-    public PaymentCardDTO getPaymentCardById(UUID paymentCardId){
-        PaymentCard paymentCard = paymentCardRepository.findById(paymentCardId).orElseThrow(() -> new EntityNotFoundException(String.format("Payment card with id=%s not found", paymentCardId)));
+    public PaymentCardDTO getPaymentCardById(UUID paymentCardId) {
+        PaymentCard paymentCard = paymentCardRepository.findById(paymentCardId).orElseThrow(() -> new EntityNotFoundException("Payment Card", paymentCardId.toString()));
         return paymentCardMapper.toPaymentCardDTO(paymentCard);
     }
 
@@ -59,8 +60,8 @@ public class PaymentCardServiceImpl implements IPaymentCardService {
 
     @Override
     @Transactional
-    public PaymentCardDTO updatePaymentCardById(UUID paymentCardId, @NotNull @Valid PaymentCardDTO paymentCardDTO){
-        PaymentCard paymentCardToUpdate = paymentCardRepository.findById(paymentCardId).orElseThrow(() -> new EntityNotFoundException(String.format("Payment card with id=%s not found", paymentCardId)));
+    public PaymentCardDTO updatePaymentCardById(UUID paymentCardId, @NotNull @Valid PaymentCardDTO paymentCardDTO) {
+        PaymentCard paymentCardToUpdate = paymentCardRepository.findById(paymentCardId).orElseThrow(() -> new EntityNotFoundException("Payment Card", paymentCardId.toString()));
         paymentCardMapper.updateFromDTO(paymentCardDTO, paymentCardToUpdate);
         return paymentCardMapper.toPaymentCardDTO(paymentCardRepository.save(paymentCardToUpdate));
     }

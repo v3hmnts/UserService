@@ -1,5 +1,6 @@
 package UserService.entity;
 
+import UserService.exception.BusinessRuleConstraintViolationException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -64,12 +65,9 @@ public class User {
     @LastModifiedDate
     private Timestamp updatedAt;
 
-    public void addPaymentCard(PaymentCard paymentCard) throws Exception {
-        if (this.cards == null) {
-            throw new Exception("User.cards shouldn't be null");
-        }
+    public void addPaymentCard(PaymentCard paymentCard) {
         if (this.cards.size() >= 5) {
-            throw new Exception("User should have no more than 5 payment cards");
+            throw new BusinessRuleConstraintViolationException("User should have no more than 5 payment cards");
         }
         this.cards.add(paymentCard);
         paymentCard.setUser(this);

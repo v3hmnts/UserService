@@ -36,6 +36,7 @@ public interface PaymentCardMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "user", ignore = true)
     void updateFromDTOWithCards(PaymentCardDTOWithUser dto, @MappingTarget PaymentCard paymentCard);
 
 }
