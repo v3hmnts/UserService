@@ -1,9 +1,20 @@
 package UserService.specification;
 
 import UserService.entity.PaymentCard;
+import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.jpa.domain.Specification;
 
 public class PaymentCardSpecification {
+
+    public static Specification<PaymentCard> withUser() {
+        return (root, query, criteriaBuilder) -> {
+            if (query.getResultType() == Long.class || query.getResultType() == long.class) {
+                return null;
+            }
+            root.fetch("user", JoinType.LEFT);
+            return null;
+        };
+    }
 
     public static Specification<PaymentCard> hasOwnerNameAndSurnameEqual(String name, String surname) {
         return hasOwnerNameEquals(name).and(hasSurnameEquals(surname));
