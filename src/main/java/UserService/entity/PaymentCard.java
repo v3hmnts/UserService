@@ -17,9 +17,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
 @EntityListeners(AuditingEntityListener.class)
-@ToString
 public class PaymentCard {
 
     @Id
@@ -27,16 +25,13 @@ public class PaymentCard {
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Digits(integer = 16, message = "Credit card should have 16 digits number", fraction = 0)
-    @Min(value = 1000000000000000L, message = "Credit card should have 16 digits number")
-    @Max(value = 9999999999999999L, message = "Credit card should have 16 digits number")
+    @NotBlank
+    @Size(min = 16,max = 16,message = "Credit card should have 16 digits number")
     @Column(unique = true, name = "number")
-    private long number;
+    private String number;
 
     @NotBlank(message = "Holder name and surname is mandatory")
     @Column(name = "holder")
@@ -49,7 +44,7 @@ public class PaymentCard {
     @Column(name = "active")
     private boolean active;
 
-    @Column(name = "created_at", updatable = false)
+    @Column(name = "created_at",updatable = false)
     @CreatedDate
     private Timestamp createdAt;
 
@@ -57,4 +52,21 @@ public class PaymentCard {
     @LastModifiedDate
     private Timestamp updatedAt;
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (!(obj instanceof PaymentCard))
+            return false;
+
+        PaymentCard other = (PaymentCard) obj;
+
+        return id != null &&
+                id.equals(other.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

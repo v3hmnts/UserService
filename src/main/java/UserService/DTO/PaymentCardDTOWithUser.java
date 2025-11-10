@@ -17,10 +17,9 @@ public class PaymentCardDTOWithUser {
     @ToString.Exclude
     private UserDTO user;
 
-    @Digits(integer = 16, message = "Credit card should have 16 digits number", fraction = 0)
-    @Min(value = 1000000000000000L, message = "Credit card should have 16 digits number")
-    @Max(value = 9999999999999999L, message = "Credit card should have 16 digits number")
-    private long number;
+    @NotBlank(message = "Payment card number shouldn't be blank")
+    @Size(min = 16,max = 16,message = "Credit card should have 16 digits number")
+    private String number;
 
     @NotBlank(message = "Holder name and surname is mandatory")
     private String holder;
