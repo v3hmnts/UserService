@@ -19,8 +19,8 @@ public interface IPaymentCardService {
 
     public PaymentCardDTO updatePaymentCardById(UUID paymentCardId, PaymentCardDTO paymentCardDTO);
 
-    public void deactivatePaymentCardById(UUID paymentCardId);
+    public PaymentCardDTO deactivatePaymentCardById(UUID paymentCardId);
 
-    public void activatePaymentCardById(UUID paymentCardId);
+    public PaymentCardDTO activatePaymentCardById(UUID paymentCardId);
 
 }

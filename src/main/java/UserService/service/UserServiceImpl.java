@@ -79,13 +79,15 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional
-    public void deactivateUserById(UUID userId) {
+    public UserDTO deactivateUserById(UUID userId) {
         userRepository.deactivateUserById(userId);
+        return userMapper.toUserDTO(userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException(String.format("User with id=%s not found",userId)));
     }
 
     @Override
     @Transactional
-    public void activateUserById(UUID userId) {
+    public UserDTO activateUserById(UUID userId) {
         userRepository.activateUserById(userId);
+        return userMapper.toUserDTO(userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException(String.format("User with id=%s not found",userId)));
     }
 }

@@ -16,7 +16,8 @@ import java.util.UUID;
 @EqualsAndHashCode
 @ToString
 public class UserDTOWIthCards {
-    private UUID id;
+
+    private Long id;
 
     @NotBlank(message = "Name shouldn't be empty")
     @Size(min = 3, max = 100, message = "Name length should be between 3 and 100 characters")
@@ -37,6 +38,5 @@ public class UserDTOWIthCards {
     private List<PaymentCardDTO> cards;
 
     private boolean active;
-
 
 }
