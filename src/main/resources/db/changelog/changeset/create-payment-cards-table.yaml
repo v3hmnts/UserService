@@ -27,10 +27,10 @@ databaseChangeLog:
                     foreignKeyName: fk_user_id
               - column:
                   name: number
-                  type: BIGINT
+                  type: VARCHAR(16)
                   constraints:
-                    nullable: false
                     unique: true
+                    nullable: false
               - column:
                   name: holder
                   type: VARCHAR(255)
