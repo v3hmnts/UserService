@@ -14,7 +14,7 @@ public class PaymentCardDTO {
     private UUID id;
 
     @EqualsAndHashCode.Exclude
-    private UUID userId;
+    private Long userId;
 
     @NotBlank(message = "Payment card number shouldn't be blank")
     @Size(min = 16,max = 16,message = "Credit card should have 16 digits number")

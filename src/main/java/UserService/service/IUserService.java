@@ -22,11 +22,11 @@ public interface IUserService {
 
     public Page<UserDTOWIthCards> getAllUsersWithCardsFilteredBy(UserFilterRequest userFilterRequest, Pageable pageable);
 
-    public void updateUserById(UUID userId, UserDTO userDTO);
+    public UserDTO updateUserById(UUID userId, UserDTO userDTO);
 
-    public void deactivateUserById(UUID userId);
+    public UserDTO deactivateUserById(UUID userId);
 
-    public void activateUserById(UUID userId);
+    public UserDTO activateUserById(UUID userId);
 
 
 }
