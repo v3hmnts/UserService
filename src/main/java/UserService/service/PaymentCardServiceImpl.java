@@ -67,13 +67,15 @@ public class PaymentCardServiceImpl implements IPaymentCardService {
 
     @Override
     @Transactional
-    public void deactivatePaymentCardById(UUID paymentCardId) {
+    public PaymentCardDTO deactivatePaymentCardById(UUID paymentCardId) {
         paymentCardRepository.deactivateCardById(paymentCardId);
+        paymentCardMapper.toPaymentCardDTO(paymentCardRepository.findById(paymentCardId).orElseThrow(() -> new EntityNotFoundException(String.format("Payment Card with id=%s not found",paymentCardId))));
     }
 
     @Override
     @Transactional
-    public void activatePaymentCardById(UUID paymentCardId) {
+    public PaymentCardDTO activatePaymentCardById(UUID paymentCardId) {
         paymentCardRepository.activateCardById(paymentCardId);
+        paymentCardMapper.toPaymentCardDTO(paymentCardRepository.findById(paymentCardId).orElseThrow(() -> new EntityNotFoundException(String.format("Payment Card with id=%s not found",paymentCardId))));
     }
 }

@@ -11,7 +11,7 @@ import java.util.UUID;
 @Data
 public class PaymentCardDTO {
 
-    private UUID id;
+    private Long id;
 
     @EqualsAndHashCode.Exclude
     private Long userId;
