@@ -37,8 +37,8 @@ databaseChangeLog:
                   name: email
                   type: VARCHAR(255)
                   constraints:
-                    nullable: false
                     unique: true
+                    nullable: false
               - column:
                   name: active
                   type: BOOLEAN
@@ -56,3 +56,15 @@ databaseChangeLog:
                   defaultValueComputed: CURRENT_TIMESTAMP
                   constraints:
                     nullable: false
+  - changeSet:
+      id: createIndexForEmail
+      author: Vhmnts
+      changes:
+        - createIndex:
+            indexName: idx_users_email
+            schemaName: user_service
+            tableName: users
+            columns:
+              - column:
+                  name: email
+            unique: true
