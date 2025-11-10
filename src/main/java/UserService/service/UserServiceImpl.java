@@ -19,6 +19,10 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -44,6 +48,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional
+    @CachePut(value = "userDTO",key = "#result.id")
     public UserDTO addUser(@NotNull @Valid UserDTO userDTO) {
         userRepository.findByEmail(userDTO.getEmail()).ifPresent(user -> {
             throw new BusinessRuleConstraintViolationException(String.format("User with email %s already exists. Email should be unique",user.getEmail()));
@@ -53,12 +58,19 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    @Cacheable(value = "userDTO",key = "#userId")
     public UserDTO getUserById(UUID userId) {
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         User user = this.userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User", userId.toString()));
         return userMapper.toUserDTO(user);
     }
 
     @Override
+    @Cacheable(value = "userDTOWithCards",key = "#userId")
     public UserDTOWIthCards getUserWithCardsById(UUID userId) {
         User user = this.userRepository.findWithCardsById(userId).orElseThrow(() -> new EntityNotFoundException("User", userId.toString()));
         return userMapper.toUserDTOWithCards(user, new CycleAvoidingMappingContext());
@@ -76,6 +88,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Transactional
+    @CachePut(value = "userDTOWithCards", key = "#result.id")
     public UserDTOWIthCards addPaymentCardToUser(UUID userId, @NotNull @Valid PaymentCardDTO paymentCardDTO) {
         User user = userRepository.findWithCardsById(userId).orElseThrow(() -> new EntityNotFoundException("User", userId.toString()));
         PaymentCard paymentCard = paymentCardMapper.toEntity(paymentCardDTO);
@@ -91,6 +104,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional
+    @CachePut(value = "userDTO",key = "#result.id")
     public void updateUserById(UUID userId, @NotNull @Valid UserDTO userDTO) {
         User userToUpdate = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User", userId.toString()));
         userMapper.updateUserFromDTO(userDTO, userToUpdate);
@@ -99,12 +113,20 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional
+    @Caching(evict ={
+        @CacheEvict(value = "UserDTO",key = "#userId"),
+        @CacheEvict(value = "UserDTOWithCards", key = "#userId")}
+    )
     public void deactivateUserById(UUID userId) {
         userRepository.deactivateUserById(userId);
     }
 
     @Override
     @Transactional
+    @Caching(evict ={
+            @CacheEvict(value = "UserDTO",key = "#userId"),
+            @CacheEvict(value = "UserDTOWithCards", key = "#userId")}
+    )
     public void activateUserById(UUID userId) {
         userRepository.activateUserById(userId);
     }
