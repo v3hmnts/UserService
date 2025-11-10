@@ -1,23 +1,24 @@
 package UserService.DTO;
 
 import jakarta.persistence.Column;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.sql.Date;
-import java.util.UUID;
 
 @Data
 public class PaymentCardDTO {
 
-    private UUID id;
+    private Long id;
 
     @EqualsAndHashCode.Exclude
-    private UUID userId;
+    private Long userId;
 
     @NotBlank(message = "Payment card number shouldn't be blank")
-    @Size(min = 16,max = 16,message = "Credit card should have 16 digits number")
+    @Size(min = 16, max = 16, message = "Credit card should have 16 digits number")
     private String number;
 
     @NotBlank(message = "Holder name and surname is mandatory")
@@ -25,6 +26,7 @@ public class PaymentCardDTO {
 
     //TODO Think about should it be in future or not
     @Future(message = "Expiration date should be in future")
+
     private Date expirationDate;
 
     @Column(name = "active")

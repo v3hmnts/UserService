@@ -1,6 +1,7 @@
 package UserService.controller;
 
 import UserService.DTO.PaymentCardDTO;
+import UserService.DTO.UserDTO;
 import UserService.service.IPaymentCardService;
 import UserService.specification.PaymentCardFilterRequest;
 import jakarta.validation.Valid;
@@ -32,7 +33,7 @@ public class PaymentCardController {
     }
 
     @GetMapping("/{paymentCardId}")
-    public ResponseEntity<PaymentCardDTO> getPaymentCardById(@PathVariable UUID paymentCardId) {
+    public ResponseEntity<PaymentCardDTO> getPaymentCardById(@PathVariable Long paymentCardId) {
         PaymentCardDTO paymentCard = paymentCardService.getPaymentCardById(paymentCardId);
         return ResponseEntity.ok(paymentCard);
     }
@@ -47,7 +48,7 @@ public class PaymentCardController {
 
     @PutMapping("/{paymentCardId}")
     public ResponseEntity<PaymentCardDTO> updatePaymentCardById(
-            @PathVariable UUID paymentCardId,
+            @PathVariable Long paymentCardId,
             @Valid @RequestBody PaymentCardDTO paymentCardDTO) {
 
         PaymentCardDTO updatedPaymentCard = paymentCardService.updatePaymentCardById(paymentCardId, paymentCardDTO);
@@ -55,15 +56,15 @@ public class PaymentCardController {
     }
 
     @PatchMapping("/{paymentCardId}/deactivate")
-    public ResponseEntity<Void> deactivatePaymentCardById(@PathVariable UUID paymentCardId) {
-        paymentCardService.deactivatePaymentCardById(paymentCardId);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<PaymentCardDTO> deactivatePaymentCardById(@PathVariable Long paymentCardId) {
+        PaymentCardDTO paymentCardDTO = paymentCardService.deactivatePaymentCardById(paymentCardId);
+        return ResponseEntity.ok(paymentCardDTO);
     }
 
     @PatchMapping("/{paymentCardId}/activate")
-    public ResponseEntity<Void> activatePaymentCardById(@PathVariable UUID paymentCardId) {
-        paymentCardService.activatePaymentCardById(paymentCardId);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<PaymentCardDTO> activatePaymentCardById(@PathVariable Long paymentCardId) {
+        PaymentCardDTO paymentCardDTO = paymentCardService.activatePaymentCardById(paymentCardId);
+        return ResponseEntity.ok(paymentCardDTO);
     }
 
 }

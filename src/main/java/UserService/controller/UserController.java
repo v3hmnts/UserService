@@ -43,13 +43,13 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable(name = "userId") UUID userId) {
+    public ResponseEntity<UserDTO> getUserById(@PathVariable(name = "userId") Long userId) {
         UserDTO userDTO = userService.getUserById(userId);
         return ResponseEntity.status(HttpStatus.OK).body(userDTO);
     }
 
     @GetMapping("/{userId}/with-cards")
-    public ResponseEntity<UserDTOWIthCards> getUserWithCardsById(@PathVariable UUID userId) {
+    public ResponseEntity<UserDTOWIthCards> getUserWithCardsById(@PathVariable Long userId) {
         UserDTOWIthCards userWithCards = userService.getUserWithCardsById(userId);
         return ResponseEntity.ok(userWithCards);
     }
@@ -78,33 +78,33 @@ public class UserController {
 
     @PutMapping("/{userId}")
     public ResponseEntity<Void> updateUserById(
-            @PathVariable UUID userId,
+            @PathVariable Long userId,
             @Valid @RequestBody UserDTO userDTO) throws Exception {
         userService.updateUserById(userId, userDTO);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{userId}/deactivate")
-    public ResponseEntity<Void> deactivateUserById(@PathVariable UUID userId) {
+    public ResponseEntity<Void> deactivateUserById(@PathVariable Long userId) {
         userService.deactivateUserById(userId);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{userId}/activate")
-    public ResponseEntity<Void> activateUserById(@PathVariable UUID userId) {
+    public ResponseEntity<Void> activateUserById(@PathVariable Long userId) {
         userService.activateUserById(userId);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{userId}/cards")
-    public ResponseEntity<List<PaymentCardDTO>> getAllPaymentCardsByUserId(@PathVariable UUID userId) {
+    public ResponseEntity<List<PaymentCardDTO>> getAllPaymentCardsByUserId(@PathVariable Long userId) {
         List<PaymentCardDTO> paymentCards = paymentCardService.getAllPaymentCardsByUserId(userId);
         return ResponseEntity.ok(paymentCards);
     }
 
     @PostMapping("/{userId}/cards")
     @Transactional
-    public ResponseEntity<UserDTOWIthCards> addPaymentCard(@PathVariable UUID userId, @NotNull @Valid @RequestBody PaymentCardDTO paymentCardDTO) {
+    public ResponseEntity<UserDTOWIthCards> addPaymentCard(@PathVariable Long userId, @NotNull @Valid @RequestBody PaymentCardDTO paymentCardDTO) {
         UserDTOWIthCards userDTO = userService.addPaymentCardToUser(userId, paymentCardDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
     }

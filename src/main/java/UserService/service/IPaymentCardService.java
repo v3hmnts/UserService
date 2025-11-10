@@ -11,18 +11,16 @@ import java.util.UUID;
 public interface IPaymentCardService {
     public PaymentCardDTO addPaymentCard(PaymentCardDTO paymentCardDTO);
 
-    //public PaymentCardDTO addPaymentCardToUser(UUID userId,PaymentCardDTO paymentCardDTO);
-
-    public PaymentCardDTO getPaymentCardById(UUID paymentCardId);
+    public PaymentCardDTO getPaymentCardById(Long paymentCardId);
 
     public Page<PaymentCardDTO> getAllPaymentCardsFilteredBy(PaymentCardFilterRequest paymentCardFilterRequest, Pageable pageable);
 
-    public List<PaymentCardDTO> getAllPaymentCardsByUserId(UUID userId);
+    public List<PaymentCardDTO> getAllPaymentCardsByUserId(Long userId);
 
-    public PaymentCardDTO updatePaymentCardById(UUID paymentCardId, PaymentCardDTO paymentCardDTO);
+    public PaymentCardDTO updatePaymentCardById(Long paymentCardId, PaymentCardDTO paymentCardDTO);
 
-    public void deactivatePaymentCardById(UUID paymentCardId);
+    public PaymentCardDTO deactivatePaymentCardById(Long paymentCardId);
 
-    public void activatePaymentCardById(UUID paymentCardId);
+    public PaymentCardDTO activatePaymentCardById(Long paymentCardId);
 
 }

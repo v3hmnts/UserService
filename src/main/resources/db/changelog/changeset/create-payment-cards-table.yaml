@@ -2,33 +2,38 @@ databaseChangeLog:
   - changeSet:
       id: create-payment-cards-table
       author: Vhmnts
+      preconditions:
+        - onFail: MARK_RAN
+          not:
+            - tableExists:
+                tableName: payment_cards
       changes:
         - createTable:
             tableName: payment_cards
             columns:
               - column:
                   name: id
-                  type: UUID
-                  autoIncrement: false
+                  type: BIGINT
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
                   name: user_id
-                  type: UUID
+                  type: BIGINT
                   autoIncrement: false
                   constraints:
                     nullable: false
                     foreignKeyName: fk_user_id
               - column:
                   name: number
-                  type: BIGINT
+                  type: VARCHAR(16)
                   constraints:
-                    nullable: false
                     unique: true
+                    nullable: false
               - column:
                   name: holder
-                  type: VARCHAR
+                  type: VARCHAR(255)
                   constraints:
                     nullable: false
               - column:

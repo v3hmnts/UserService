@@ -39,9 +39,8 @@ public class PaymentCardServiceImpl implements IPaymentCardService {
         return paymentCardMapper.toPaymentCardDTO(paymentCardRepository.save(paymentCard));
     }
 
-
     @Override
-    public PaymentCardDTO getPaymentCardById(UUID paymentCardId) {
+    public PaymentCardDTO getPaymentCardById(Long paymentCardId) {
         PaymentCard paymentCard = paymentCardRepository.findById(paymentCardId).orElseThrow(() -> new EntityNotFoundException("Payment Card", paymentCardId.toString()));
         return paymentCardMapper.toPaymentCardDTO(paymentCard);
     }
@@ -53,14 +52,14 @@ public class PaymentCardServiceImpl implements IPaymentCardService {
     }
 
     @Override
-    public List<PaymentCardDTO> getAllPaymentCardsByUserId(UUID userId) {
+    public List<PaymentCardDTO> getAllPaymentCardsByUserId(Long userId) {
         List<PaymentCard> paymentCards = paymentCardRepository.findAllPaymentCardsByUserId(userId);
         return paymentCardMapper.toPaymentCardDTOList(paymentCards);
     }
 
     @Override
     @Transactional
-    public PaymentCardDTO updatePaymentCardById(UUID paymentCardId, @NotNull @Valid PaymentCardDTO paymentCardDTO) {
+    public PaymentCardDTO updatePaymentCardById(Long paymentCardId, @NotNull @Valid PaymentCardDTO paymentCardDTO) {
         PaymentCard paymentCardToUpdate = paymentCardRepository.findById(paymentCardId).orElseThrow(() -> new EntityNotFoundException("Payment Card", paymentCardId.toString()));
         paymentCardMapper.updateFromDTO(paymentCardDTO, paymentCardToUpdate);
         return paymentCardMapper.toPaymentCardDTO(paymentCardRepository.save(paymentCardToUpdate));
@@ -68,13 +67,15 @@ public class PaymentCardServiceImpl implements IPaymentCardService {
 
     @Override
     @Transactional
-    public void deactivatePaymentCardById(UUID paymentCardId) {
+    public PaymentCardDTO deactivatePaymentCardById(Long paymentCardId) {
         paymentCardRepository.deactivateCardById(paymentCardId);
+        return paymentCardMapper.toPaymentCardDTO(paymentCardRepository.findById(paymentCardId).orElseThrow(() -> new EntityNotFoundException("Payment Card", paymentCardId.toString())));
     }
 
     @Override
     @Transactional
-    public void activatePaymentCardById(UUID paymentCardId) {
+    public PaymentCardDTO activatePaymentCardById(Long paymentCardId) {
         paymentCardRepository.activateCardById(paymentCardId);
+        return paymentCardMapper.toPaymentCardDTO(paymentCardRepository.findById(paymentCardId).orElseThrow(() -> new EntityNotFoundException("Payment Card", paymentCardId.toString())));
     }
 }

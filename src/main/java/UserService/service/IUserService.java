@@ -13,11 +13,11 @@ public interface IUserService {
 
     public UserDTO addUser(UserDTO userDTO);
 
-    public UserDTOWIthCards addPaymentCardToUser(UUID userId, PaymentCardDTO paymentCardDTO);
+    public UserDTOWIthCards addPaymentCardToUser(Long userId, PaymentCardDTO paymentCardDTO);
 
-    public UserDTO getUserById(UUID userId);
+    public UserDTO getUserById(Long userId);
 
-    public UserDTOWIthCards getUserWithCardsById(UUID userId);
+    public UserDTOWIthCards getUserWithCardsById(Long userId);
 
     public Page<UserDTO> getAllUsers(Pageable pageable);
 
@@ -25,10 +25,10 @@ public interface IUserService {
 
     public Page<UserDTOWIthCards> getAllUsersWithCardsFilteredBy(UserFilterRequest userFilterRequest, Pageable pageable);
 
-    public UserDTO updateUserById(UUID userId, UserDTO userDTO);
+    public UserDTO updateUserById(Long userId, UserDTO userDTO);
 
-    public void deactivateUserById(UUID userId);
+    public UserDTO deactivateUserById(Long userId);
 
-    public void activateUserById(UUID userId);
+    public UserDTO activateUserById(Long userId);
 
 }

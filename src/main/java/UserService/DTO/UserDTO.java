@@ -7,12 +7,11 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.sql.Date;
-import java.util.UUID;
 
 @Data
 public class UserDTO {
 
-    private UUID id;
+    private Long id;
 
     @NotBlank(message = "Name shouldn't be empty")
     @Size(min = 3, max = 100, message = "Name length should be between 3 and 100 characters")
