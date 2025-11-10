@@ -28,11 +28,10 @@ public class PaymentCard {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Digits(integer = 16, message = "Credit card should have 16 digits number", fraction = 0)
-    @Min(value = 1000000000000000L, message = "Credit card should have 16 digits number")
-    @Max(value = 9999999999999999L, message = "Credit card should have 16 digits number")
+    @NotBlank
+    @Size(min = 16,max = 16,message = "Credit card should have 16 digits number")
     @Column(unique = true, name = "number")
-    private long number;
+    private String number;
 
     @NotBlank(message = "Holder name and surname is mandatory")
     @Column(name = "holder")
