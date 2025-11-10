@@ -16,7 +16,7 @@ public interface PaymentCardRepository extends JpaRepository<PaymentCard, UUID>,
     @Query(value = "select pc.* from payment_cards pc where pc.user_id=:userId", nativeQuery = true)
     public List<PaymentCard> findAllPaymentCardsByUserId(@Param("userId") UUID userId);
 
-    @Query(value = "SELECT pc FROM PaymentCard pc LEFT JOIN FETCH User u", countQuery = "SELECT COUNT(pc.id) FROM PaymentCard pc")
+    @Query(value = "SELECT pc FROM PaymentCard pc LEFT JOIN FETCH pc.user", countQuery = "SELECT COUNT(pc) FROM PaymentCard pc")
     public List<PaymentCard> findAllWithUsers(Pageable pageable);
 
     @Modifying

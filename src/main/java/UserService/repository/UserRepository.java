@@ -24,6 +24,6 @@ public interface UserRepository extends JpaRepository<User, UUID>, JpaSpecificat
     @Query(value = "UPDATE User u SET u.active=true WHERE u.id=:userId")
     public int activateUserById(@Param("userId") UUID userId);
 
-    @Query(value = "SELECT u FROM User u LEFT JOIN FETCH u.cards", countQuery = "SELECT COUNT(u.id) FROM Users u")
+    @Query(value = "SELECT u FROM User u LEFT JOIN FETCH u.cards", countQuery = "SELECT COUNT(u) FROM Users u")
     public List<User> findAllWithCards(Pageable pageable);
 }
