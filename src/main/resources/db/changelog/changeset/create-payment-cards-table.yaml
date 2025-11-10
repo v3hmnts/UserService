@@ -27,8 +27,9 @@ databaseChangeLog:
                     foreignKeyName: fk_user_id
               - column:
                   name: number
-                  type: BIGINT
+                  type: VARCHAR(16)
                   constraints:
+                    unique: true
                     nullable: false
               - column:
                   name: holder
