@@ -11,6 +11,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -34,12 +36,14 @@ public class PaymentCardServiceImpl implements IPaymentCardService {
 
     @Override
     @Transactional
+    @CachePut(value = "PaymentCardDTO", key="#result.id")
     public PaymentCardDTO addPaymentCard(@NotNull @Valid PaymentCardDTO paymentCardDTO) {
         PaymentCard paymentCard = paymentCardMapper.toEntity(paymentCardDTO);
         return paymentCardMapper.toPaymentCardDTO(paymentCardRepository.save(paymentCard));
     }
 
     @Override
+    @Cacheable(value = "PaymentCardDTO", key = "#result.id")
     public PaymentCardDTO getPaymentCardById(Long paymentCardId) {
         PaymentCard paymentCard = paymentCardRepository.findById(paymentCardId).orElseThrow(() -> new EntityNotFoundException("Payment Card", paymentCardId.toString()));
         return paymentCardMapper.toPaymentCardDTO(paymentCard);
@@ -59,6 +63,7 @@ public class PaymentCardServiceImpl implements IPaymentCardService {
 
     @Override
     @Transactional
+    @CachePut(value = "PaymentCardDTO",key = "#paymentCardId")
     public PaymentCardDTO updatePaymentCardById(Long paymentCardId, @NotNull @Valid PaymentCardDTO paymentCardDTO) {
         PaymentCard paymentCardToUpdate = paymentCardRepository.findById(paymentCardId).orElseThrow(() -> new EntityNotFoundException("Payment Card", paymentCardId.toString()));
         paymentCardMapper.updateFromDTO(paymentCardDTO, paymentCardToUpdate);
@@ -67,6 +72,7 @@ public class PaymentCardServiceImpl implements IPaymentCardService {
 
     @Override
     @Transactional
+    @CachePut(value = "PaymentCardDTO",key = "#result.id")
     public PaymentCardDTO deactivatePaymentCardById(Long paymentCardId) {
         paymentCardRepository.deactivateCardById(paymentCardId);
         return paymentCardMapper.toPaymentCardDTO(paymentCardRepository.findById(paymentCardId).orElseThrow(() -> new EntityNotFoundException("Payment Card", paymentCardId.toString())));
@@ -74,6 +80,7 @@ public class PaymentCardServiceImpl implements IPaymentCardService {
 
     @Override
     @Transactional
+    @CachePut(value = "PaymentCardDTO",key = "#result.id")
     public PaymentCardDTO activatePaymentCardById(Long paymentCardId) {
         paymentCardRepository.activateCardById(paymentCardId);
         return paymentCardMapper.toPaymentCardDTO(paymentCardRepository.findById(paymentCardId).orElseThrow(() -> new EntityNotFoundException("Payment Card", paymentCardId.toString())));
