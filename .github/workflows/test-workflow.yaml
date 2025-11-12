@@ -1,8 +1,8 @@
-name: CI Pipeline
+name: CI Pipeline Test
 
 on:
   push:
-    branches: [ DockerTask ]
+    branches: [ GithubActionsTask ]
   pull_request:
     branches: [ main ]
 
