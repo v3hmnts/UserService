@@ -1,4 +1,15 @@
+FROM eclipse-temurin:24-jdk-ubi10-minimal as build
+WORKDIR application
+ARG JAR_FILE=target/*.jar
+COPY ${JAR_FILE} application.jar
+RUN java -Djarmode=layertools -jar application.jar extract
+
 FROM eclipse-temurin:24-jdk-ubi10-minimal
-ARG JAR_FILE
-COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+WORKDIR application
+COPY --from=build application/dependencies/ ./
+COPY --from=build application/spring-boot-loader/ ./
+COPY --from=build application/snapshot-dependencies/ ./
+COPY --from=build application/application/ ./
+ENV SPRING_PROFILES_ACTIVE="dev"
+ENTRYPOINT ["java", "org.springframework.boot.loader
+.JarLauncher","--spring.profiles.active=${SPRING_PROFILES_ACTIVE}"]
