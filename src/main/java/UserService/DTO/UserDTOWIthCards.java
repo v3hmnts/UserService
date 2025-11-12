@@ -8,15 +8,17 @@ import lombok.*;
 
 import java.sql.Date;
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode
 @ToString
+@Builder(toBuilder = true)
 public class UserDTOWIthCards {
-    private UUID id;
+
+    private Long id;
 
     @NotBlank(message = "Name shouldn't be empty")
     @Size(min = 3, max = 100, message = "Name length should be between 3 and 100 characters")
@@ -37,6 +39,5 @@ public class UserDTOWIthCards {
     private List<PaymentCardDTO> cards;
 
     private boolean active;
-
 
 }

@@ -1,28 +1,25 @@
 package UserService.service;
 
+import UserService.DTO.PageDTO;
 import UserService.DTO.PaymentCardDTO;
 import UserService.specification.PaymentCardFilterRequest;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface IPaymentCardService {
     public PaymentCardDTO addPaymentCard(PaymentCardDTO paymentCardDTO);
 
-    //public PaymentCardDTO addPaymentCardToUser(UUID userId,PaymentCardDTO paymentCardDTO);
+    public PaymentCardDTO getPaymentCardById(Long paymentCardId);
 
-    public PaymentCardDTO getPaymentCardById(UUID paymentCardId);
+    public PageDTO<PaymentCardDTO> getAllPaymentCardsFilteredBy(PaymentCardFilterRequest paymentCardFilterRequest, Pageable pageable);
 
-    public Page<PaymentCardDTO> getAllPaymentCardsFilteredBy(PaymentCardFilterRequest paymentCardFilterRequest, Pageable pageable);
+    public List<PaymentCardDTO> getAllPaymentCardsByUserId(Long userId);
 
-    public List<PaymentCardDTO> getAllPaymentCardsByUserId(UUID userId);
+    public PaymentCardDTO updatePaymentCardById(Long paymentCardId, PaymentCardDTO paymentCardDTO);
 
-    public PaymentCardDTO updatePaymentCardById(UUID paymentCardId, PaymentCardDTO paymentCardDTO);
+    public PaymentCardDTO deactivatePaymentCardById(Long paymentCardId);
 
-    public void deactivatePaymentCardById(UUID paymentCardId);
-
-    public void activatePaymentCardById(UUID paymentCardId);
+    public PaymentCardDTO activatePaymentCardById(Long paymentCardId);
 
 }

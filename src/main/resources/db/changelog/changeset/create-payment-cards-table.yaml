@@ -13,14 +13,14 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: UUID
-                  autoIncrement: false
+                  type: BIGINT
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
                   name: user_id
-                  type: UUID
+                  type: BIGINT
                   autoIncrement: false
                   constraints:
                     nullable: false

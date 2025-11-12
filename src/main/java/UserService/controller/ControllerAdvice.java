@@ -6,13 +6,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RestControllerAdvice
+@org.springframework.web.bind.annotation.ControllerAdvice
 public class ControllerAdvice {
 
     @ExceptionHandler(BaseException.class)
@@ -42,7 +41,6 @@ public class ControllerAdvice {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
-        System.out.println(ex.getMessage());
         ErrorResponse errorResponse = new ErrorResponse(Instant.now(), "Internal server error", HttpStatus.INTERNAL_SERVER_ERROR, null);
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }

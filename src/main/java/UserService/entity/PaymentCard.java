@@ -1,7 +1,9 @@
 package UserService.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -9,10 +11,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.UUID;
 
 @Entity
-@Table(name = "payment_cards")
+@Table(name = "payment_cards", schema = "user_service")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,8 +23,8 @@ import java.util.UUID;
 public class PaymentCard {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
@@ -32,7 +33,7 @@ public class PaymentCard {
     private User user;
 
     @NotBlank
-    @Size(min = 16,max = 16,message = "Credit card should have 16 digits number")
+    @Size(min = 16, max = 16, message = "Credit card should have 16 digits number")
     @Column(unique = true, name = "number")
     private String number;
 
@@ -48,6 +49,7 @@ public class PaymentCard {
     private boolean active;
 
     @Column(name = "created_at", updatable = false)
+    @CreatedDate
     private Timestamp createdAt;
 
     @Column(name = "updated_at")
