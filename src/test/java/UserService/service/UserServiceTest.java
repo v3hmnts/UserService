@@ -15,8 +15,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import java.sql.Date;
 import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -56,71 +58,71 @@ public class UserServiceTest {
         when(userRepository.findByEmail(any(String.class))).thenReturn(Optional.of(new User()));
 
         // Act & Assert
-        assertThrows(BusinessRuleConstraintViolationException.class,()->userService.addUser(requestDTO));
+        assertThrows(BusinessRuleConstraintViolationException.class, () -> userService.addUser(requestDTO));
 
     }
 
     @Test
-    void getUserById_shouldThrowEntityNotFoundException(){
+    void getUserById_shouldThrowEntityNotFoundException() {
         // Arrange
         Long nonExistentUserId = 1L;
         when(userRepository.findById(any(Long.class))).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(EntityNotFoundException.class,()->userService.getUserById(nonExistentUserId));
+        assertThrows(EntityNotFoundException.class, () -> userService.getUserById(nonExistentUserId));
     }
 
     @Test
-    void getUserWithCardsById_shouldThrowEntityNotFoundException(){
+    void getUserWithCardsById_shouldThrowEntityNotFoundException() {
         // Arrange
         Long nonExistentUserId = 1L;
         when(userRepository.findWithCardsById(any(Long.class))).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(EntityNotFoundException.class,()->userService.getUserWithCardsById(nonExistentUserId));
+        assertThrows(EntityNotFoundException.class, () -> userService.getUserWithCardsById(nonExistentUserId));
     }
 
     @Test
-    void addPaymentCardToUser_shouldThrowEntityNotFoundException(){
+    void addPaymentCardToUser_shouldThrowEntityNotFoundException() {
         // Arrange
         Long nonExistentUserId = 1L;
         PaymentCardDTO paymentCardDTO = new PaymentCardDTO();
         when(userRepository.findWithCardsById(any(Long.class))).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(EntityNotFoundException.class,()->userService.addPaymentCardToUser(nonExistentUserId,paymentCardDTO));
+        assertThrows(EntityNotFoundException.class, () -> userService.addPaymentCardToUser(nonExistentUserId, paymentCardDTO));
     }
 
     @Test
-    void updateUserById_shouldThrowEntityNotFoundException(){
+    void updateUserById_shouldThrowEntityNotFoundException() {
         // Arrange
         Long nonExistentUserId = 1L;
         UserDTO userDTO = new UserDTO();
         when(userRepository.findById(any(Long.class))).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(EntityNotFoundException.class,()->userService.updateUserById(nonExistentUserId,userDTO));
+        assertThrows(EntityNotFoundException.class, () -> userService.updateUserById(nonExistentUserId, userDTO));
     }
 
     @Test
-    void deactivateUserById_shouldThrowEntityNotFoundException(){
+    void deactivateUserById_shouldThrowEntityNotFoundException() {
         // Arrange
         Long nonExistentUserId = 1L;
         when(userRepository.findById(any(Long.class))).thenReturn(Optional.empty());
         when(userRepository.deactivateUserById(any(Long.class))).thenReturn(0);
 
         // Act & Assert
-        assertThrows(EntityNotFoundException.class,()->userService.deactivateUserById(nonExistentUserId));
+        assertThrows(EntityNotFoundException.class, () -> userService.deactivateUserById(nonExistentUserId));
     }
 
     @Test
-    void activateUserById_shouldThrowEntityNotFoundException(){
+    void activateUserById_shouldThrowEntityNotFoundException() {
         // Arrange
         Long nonExistentUserId = 1L;
         when(userRepository.findById(any(Long.class))).thenReturn(Optional.empty());
         when(userRepository.activateUserById(any(Long.class))).thenReturn(0);
 
         // Act & Assert
-        assertThrows(EntityNotFoundException.class,()->userService.activateUserById(nonExistentUserId));
+        assertThrows(EntityNotFoundException.class, () -> userService.activateUserById(nonExistentUserId));
     }
 }

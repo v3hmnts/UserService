@@ -15,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
+@Builder(toBuilder = true)
 public class UserDTOWIthCards {
 
     private Long id;

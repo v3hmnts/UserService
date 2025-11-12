@@ -17,45 +17,49 @@ public class UserBuilder {
     private boolean active;
     private List<PaymentCard> cards = new ArrayList<>();
 
-    public UserBuilder id(Long id){
-        this.id=id;
-        return this;    }
-
-    public UserBuilder name(String name){
-        this.name=name;
-        return this;
-    }
-    public UserBuilder surname(String surname){
-        this.surname=surname;
-        return this;
-    }
-    public UserBuilder birthDate(Date birthDate){
-        this.birthDate=birthDate;
-        return this;
-    }
-    public UserBuilder email(String email){
-        this.email=email;
+    public UserBuilder id(Long id) {
+        this.id = id;
         return this;
     }
 
-    public UserBuilder active(Boolean active){
-        this.active=active;
+    public UserBuilder name(String name) {
+        this.name = name;
         return this;
     }
 
-    public UserBuilder cards(List<PaymentCard> cards){
-        this.cards=cards;
+    public UserBuilder surname(String surname) {
+        this.surname = surname;
         return this;
     }
 
-    public User build(){
+    public UserBuilder birthDate(Date birthDate) {
+        this.birthDate = birthDate;
+        return this;
+    }
+
+    public UserBuilder email(String email) {
+        this.email = email;
+        return this;
+    }
+
+    public UserBuilder active(Boolean active) {
+        this.active = active;
+        return this;
+    }
+
+    public UserBuilder cards(List<PaymentCard> cards) {
+        this.cards = cards;
+        return this;
+    }
+
+    public User build() {
         User user = new User(this.id,
                 this.name,
                 this.surname,
                 this.birthDate,
                 this.email,
                 this.active);
-        if(!cards.isEmpty()){
+        if (!cards.isEmpty()) {
             cards.forEach(user::addPaymentCard);
         }
         return user;

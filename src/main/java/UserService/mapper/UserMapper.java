@@ -1,7 +1,6 @@
 package UserService.mapper;
 
 import UserService.DTO.PageDTO;
-import UserService.DTO.PaymentCardDTO;
 import UserService.DTO.UserDTO;
 import UserService.DTO.UserDTOWIthCards;
 import UserService.entity.User;

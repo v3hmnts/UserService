@@ -4,13 +4,14 @@ import jakarta.persistence.Column;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.sql.Date;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder(toBuilder = true)
 public class PaymentCardDTO {
 
     private Long id;
@@ -22,7 +23,6 @@ public class PaymentCardDTO {
     @Size(min = 16, max = 16, message = "Credit card should have 16 digits number")
     private String number;
 
-    @NotBlank(message = "Holder name and surname is mandatory")
     private String holder;
 
     //TODO Think about should it be in future or not

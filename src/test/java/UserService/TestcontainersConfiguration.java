@@ -14,12 +14,12 @@ public class TestcontainersConfiguration {
     @Bean
     @ServiceConnection
     PostgreSQLContainer<?> postgresContainer() {
-        return new PostgreSQLContainer<>(DockerImageName.parse("postgres:latest")).withCopyFileToContainer(MountableFile.forClasspathResource("create-database.sql"),"docker-entrypoint-initdb.d/init.sql");
+        return new PostgreSQLContainer<>(DockerImageName.parse("postgres:latest")).withCopyFileToContainer(MountableFile.forClasspathResource("create-database.sql"), "docker-entrypoint-initdb.d/init.sql");
     }
 
     @Bean
     @ServiceConnection
-    RedisContainer redisContainer(){
+    RedisContainer redisContainer() {
         return new RedisContainer("redis:latest")
                 .withExposedPorts(6379);
     }

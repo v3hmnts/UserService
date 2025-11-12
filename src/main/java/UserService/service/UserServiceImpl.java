@@ -7,6 +7,7 @@ import UserService.DTO.UserDTOWIthCards;
 import UserService.entity.PaymentCard;
 import UserService.entity.User;
 import UserService.exception.BusinessRuleConstraintViolationException;
+import UserService.exception.EntityAlreadyExistException;
 import UserService.exception.EntityNotFoundException;
 import UserService.mapper.CycleAvoidingMappingContext;
 import UserService.mapper.PaymentCardMapper;
@@ -27,8 +28,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 @Service
 @NoArgsConstructor
 public class UserServiceImpl implements IUserService {
@@ -48,7 +47,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional
-    @CachePut(value = "userDTO",key = "#result.id")
+    @CachePut(value = "userDTO", key = "#result.id")
     public UserDTO addUser(@NotNull @Valid UserDTO userDTO) {
         userRepository.findByEmail(userDTO.getEmail()).ifPresent(user -> {
             throw new BusinessRuleConstraintViolationException(String.format("User with email %s already exists. Email should be unique", user.getEmail()));
@@ -58,14 +57,14 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    @Cacheable(value = "userDTO",key = "#userId")
+    @Cacheable(value = "userDTO", key = "#userId")
     public UserDTO getUserById(Long userId) {
         User user = this.userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User", userId.toString()));
         return userMapper.toUserDTO(user);
     }
 
     @Override
-    @Cacheable(value = "userDTOWithCards",key = "#userId")
+    @Cacheable(value = "userDTOWithCards", key = "#userId")
     public UserDTOWIthCards getUserWithCardsById(Long userId) {
         User user = this.userRepository.findWithCardsById(userId).orElseThrow(() -> new EntityNotFoundException("User", userId.toString()));
         return userMapper.toUserDTOWithCards(user, new CycleAvoidingMappingContext());
@@ -87,7 +86,11 @@ public class UserServiceImpl implements IUserService {
     @CachePut(value = "userDTOWithCards", key = "#result.id")
     public UserDTOWIthCards addPaymentCardToUser(Long userId, @NotNull @Valid PaymentCardDTO paymentCardDTO) {
         User user = userRepository.findWithCardsById(userId).orElseThrow(() -> new EntityNotFoundException("User", userId.toString()));
+        paymentCardRepository.findByNumber(paymentCardDTO.getNumber()).ifPresent(paymentCard -> {
+            throw new EntityAlreadyExistException(String.format("Payment card with number=%s  already exists", paymentCard.getNumber()));
+        });
         PaymentCard paymentCard = paymentCardMapper.toEntity(paymentCardDTO);
+        paymentCard.setHolder(user.getName().toUpperCase() + user.getSurname().toUpperCase());
         user.addPaymentCard(paymentCard);
         return userMapper.toUserDTOWithCards(userRepository.save(user), new CycleAvoidingMappingContext());
     }
@@ -100,7 +103,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional
-    @CachePut(value = "userDTO",key = "#result.id")
+    @CachePut(value = "userDTO", key = "#result.id")
     public UserDTO updateUserById(Long userId, @NotNull @Valid UserDTO userDTO) {
         User userToUpdate = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User", userId.toString()));
         userMapper.updateUserFromDTO(userDTO, userToUpdate);
@@ -109,7 +112,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional
-    @CachePut(value = "userDTO",key = "#result.id")
+    @CachePut(value = "userDTO", key = "#result.id")
     public UserDTO deactivateUserById(Long userId) {
         userRepository.deactivateUserById(userId);
         return userMapper.toUserDTO(userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User", userId.toString())));
@@ -117,7 +120,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional
-    @CachePut(value = "userDTO",key = "#result.id")
+    @CachePut(value = "userDTO", key = "#result.id")
     public UserDTO activateUserById(Long userId) {
         userRepository.activateUserById(userId);
         return userMapper.toUserDTO(userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User", userId.toString())));

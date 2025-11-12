@@ -36,7 +36,7 @@ public class PaymentCardServiceTest {
     private PaymentCardServiceImpl paymentCardService;
 
     @Test
-    void addPaymentCard_shouldThrowBusinessRuleConstraintViolationException(){
+    void addPaymentCard_shouldThrowBusinessRuleConstraintViolationException() {
         // Arrange
         PaymentCard paymentCard = new PaymentCard();
         PaymentCardDTO paymentCardDTO = new PaymentCardDTO();
@@ -44,31 +44,31 @@ public class PaymentCardServiceTest {
         when(paymentCardRepository.findByNumber(any(String.class))).thenReturn(Optional.of(paymentCard));
 
         // Act & Assert
-        assertThrows(BusinessRuleConstraintViolationException.class,()->paymentCardService.addPaymentCard(paymentCardDTO));
+        assertThrows(BusinessRuleConstraintViolationException.class, () -> paymentCardService.addPaymentCard(paymentCardDTO));
     }
 
     @Test
-    void getPaymentCardById_shouldThrowEntityNotFoundException(){
+    void getPaymentCardById_shouldThrowEntityNotFoundException() {
         // Arrange
         Long nonExistentPaymentCardId = 1L;
         when(paymentCardRepository.findById(any(Long.class))).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(EntityNotFoundException.class,()->paymentCardService.getPaymentCardById(nonExistentPaymentCardId));
+        assertThrows(EntityNotFoundException.class, () -> paymentCardService.getPaymentCardById(nonExistentPaymentCardId));
     }
 
     @Test
-    void getAllPaymentCardsByUserId_shouldThrowEntityNotFoundException(){
+    void getAllPaymentCardsByUserId_shouldThrowEntityNotFoundException() {
         // Arrange
         Long nonExistentUserId = 1L;
         when(userRepository.findWithCardsById(any(Long.class))).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(EntityNotFoundException.class,()->paymentCardService.getAllPaymentCardsByUserId(nonExistentUserId));
+        assertThrows(EntityNotFoundException.class, () -> paymentCardService.getAllPaymentCardsByUserId(nonExistentUserId));
     }
 
     @Test
-    void updatePaymentCardById_shouldThrowEntityNotFoundException(){
+    void updatePaymentCardById_shouldThrowEntityNotFoundException() {
         // Arrange
         Long nonExistentPaymentCardId = 1L;
         PaymentCardDTO paymentCardDTO = new PaymentCardDTO();
@@ -76,29 +76,29 @@ public class PaymentCardServiceTest {
         when(paymentCardRepository.findById(any(Long.class))).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(EntityNotFoundException.class,()->paymentCardService.updatePaymentCardById(nonExistentPaymentCardId,paymentCardDTO));
+        assertThrows(EntityNotFoundException.class, () -> paymentCardService.updatePaymentCardById(nonExistentPaymentCardId, paymentCardDTO));
     }
 
     @Test
-    void deactivatePaymentCardById_shouldThrowEntityNotFoundException(){
+    void deactivatePaymentCardById_shouldThrowEntityNotFoundException() {
         // Arrange
         Long nonExistentPaymentCardId = 1L;
         when(paymentCardRepository.deactivateCardById(any(Long.class))).thenReturn(0);
         when(paymentCardRepository.findById(any(Long.class))).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(EntityNotFoundException.class,()->paymentCardService.deactivatePaymentCardById(nonExistentPaymentCardId));
+        assertThrows(EntityNotFoundException.class, () -> paymentCardService.deactivatePaymentCardById(nonExistentPaymentCardId));
     }
 
     @Test
-    void activatePaymentCardById_shouldThrowEntityNotFoundException(){
+    void activatePaymentCardById_shouldThrowEntityNotFoundException() {
         // Arrange
         Long nonExistentPaymentCardId = 1L;
         when(paymentCardRepository.activateCardById(any(Long.class))).thenReturn(0);
         when(paymentCardRepository.findById(any(Long.class))).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(EntityNotFoundException.class,()->paymentCardService.activatePaymentCardById(nonExistentPaymentCardId));
+        assertThrows(EntityNotFoundException.class, () -> paymentCardService.activatePaymentCardById(nonExistentPaymentCardId));
     }
 
 }

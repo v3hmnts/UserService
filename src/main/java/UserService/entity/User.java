@@ -26,6 +26,35 @@ import java.util.List;
 @ToString
 public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @NotBlank(message = "Name shouldn't be empty")
+    @Size(min = 3, max = 100, message = "Name length should be between 3 and 100 characters")
+    @Column(name = "name")
+    private String name;
+    @NotBlank(message = "Surname shouldn't be empty")
+    @Size(min = 3, max = 100, message = "Surname length should be between 3 and 100 characters")
+    @Column(name = "surname")
+    private String surname;
+    @Past
+    @Column(name = "birth_date")
+    private Date birthDate;
+    @Email(message = "Email should be valid")
+    @Size(min = 6, max = 255, message = "Email length should be between 6 and 255 characters")
+    @Column(unique = true, name = "email")
+    private String email;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<PaymentCard> cards = new ArrayList<>();
+    @Column(name = "active")
+    private boolean active;
+    @Column(name = "created_at", updatable = false)
+    @CreatedDate
+    private Timestamp createdAt;
+    @Column(name = "updated_at")
+    @LastModifiedDate
+    private Timestamp updatedAt;
+
     public User(Long id, String name, String surname, Date birthDate, String email, boolean active) {
         this.id = id;
         this.name = name;
@@ -34,43 +63,6 @@ public class User {
         this.email = email;
         this.active = active;
     }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @NotBlank(message = "Name shouldn't be empty")
-    @Size(min = 3, max = 100, message = "Name length should be between 3 and 100 characters")
-    @Column(name = "name")
-    private String name;
-
-    @NotBlank(message = "Surname shouldn't be empty")
-    @Size(min = 3, max = 100, message = "Surname length should be between 3 and 100 characters")
-    @Column(name = "surname")
-    private String surname;
-
-    @Past
-    @Column(name = "birth_date")
-    private Date birthDate;
-
-    @Email(message = "Email should be valid")
-    @Size(min = 6, max = 255, message = "Email length should be between 6 and 255 characters")
-    @Column(unique = true, name = "email")
-    private String email;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<PaymentCard> cards = new ArrayList<>();
-
-    @Column(name = "active")
-    private boolean active;
-
-    @Column(name = "created_at", updatable = false)
-    @CreatedDate
-    private Timestamp createdAt;
-
-    @Column(name = "updated_at")
-    @LastModifiedDate
-    private Timestamp updatedAt;
 
     public void addPaymentCard(PaymentCard paymentCard) {
         if (this.cards.size() >= 5) {
