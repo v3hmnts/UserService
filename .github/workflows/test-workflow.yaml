@@ -1,8 +1,8 @@
-name: CI Pipeline
+name: CI Pipeline Test
 
 on:
   push:
-    branches: [ DockerTask ]
+    branches: [ GithubActionsTask ]
   pull_request:
     branches: [ main ]
 
@@ -25,7 +25,7 @@ jobs:
           cache: 'maven'
 
       - name: Build application
-        run: mvn clean compile -Bq
+        run: mvn clean compile -B
 
       - name: Run tests
         run: mvn test -B
