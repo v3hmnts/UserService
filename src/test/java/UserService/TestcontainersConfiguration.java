@@ -24,5 +24,4 @@ public class TestcontainersConfiguration {
                 .withExposedPorts(6379);
     }
 
-
 }

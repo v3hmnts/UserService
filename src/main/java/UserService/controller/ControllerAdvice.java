@@ -11,7 +11,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+@org.springframework.web.bind.annotation.ControllerAdvice
 public class ControllerAdvice {
 
     @ExceptionHandler(BaseException.class)
