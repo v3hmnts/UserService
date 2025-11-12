@@ -1,5 +1,6 @@
 package UserService.service;
 
+import UserService.DTO.PageDTO;
 import UserService.DTO.PaymentCardDTO;
 import UserService.DTO.UserDTO;
 import UserService.DTO.UserDTOWIthCards;
@@ -71,14 +72,14 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public Page<UserDTO> getAllUsers(Pageable pageable) {
-        return this.userRepository.findAll(pageable).map(userMapper::toUserDTO);
+    public PageDTO<UserDTO> getAllUsers(Pageable pageable) {
+        return userMapper.toUserDTOPage(userRepository.findAll(pageable).map(userMapper::toUserDTO));
     }
 
     @Override
-    public Page<UserDTO> getAllUsersFilteredBy(UserFilterRequest userFilterRequest, Pageable pageable) {
+    public PageDTO<UserDTO> getAllUsersFilteredBy(UserFilterRequest userFilterRequest, Pageable pageable) {
         Page<User> userPage = this.userRepository.findAll(userFilterRequest.toSpecification(), pageable);
-        return userPage.map(user -> userMapper.toUserDTO(user));
+        return userMapper.toUserDTOPage(userPage.map(user -> userMapper.toUserDTO(user)));
     }
 
 
@@ -91,10 +92,10 @@ public class UserServiceImpl implements IUserService {
         return userMapper.toUserDTOWithCards(userRepository.save(user), new CycleAvoidingMappingContext());
     }
 
-    public Page<UserDTOWIthCards> getAllUsersWithCardsFilteredBy(UserFilterRequest userFilterRequest, Pageable pageable) {
+    public PageDTO<UserDTOWIthCards> getAllUsersWithCardsFilteredBy(UserFilterRequest userFilterRequest, Pageable pageable) {
         Specification<User> specification = userFilterRequest.toSpecification().and(UserSpecification.withPaymentCards());
         Page<User> userPage = this.userRepository.findAll(specification, pageable);
-        return userPage.map(user -> userMapper.toUserDTOWithCards(user, new CycleAvoidingMappingContext()));
+        return userMapper.toUserDTOWithCardsPage(userPage.map(user -> userMapper.toUserDTOWithCards(user, new CycleAvoidingMappingContext())));
     }
 
     @Override

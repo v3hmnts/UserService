@@ -1,5 +1,6 @@
 package UserService.service;
 
+import UserService.DTO.PageDTO;
 import UserService.DTO.PaymentCardDTO;
 import UserService.DTO.UserDTO;
 import UserService.DTO.UserDTOWIthCards;
@@ -19,11 +20,11 @@ public interface IUserService {
 
     public UserDTOWIthCards getUserWithCardsById(Long userId);
 
-    public Page<UserDTO> getAllUsers(Pageable pageable);
+    public PageDTO<UserDTO> getAllUsers(Pageable pageable);
 
-    public Page<UserDTO> getAllUsersFilteredBy(UserFilterRequest userFilterRequest, Pageable pageable);
+    public PageDTO<UserDTO> getAllUsersFilteredBy(UserFilterRequest userFilterRequest, Pageable pageable);
 
-    public Page<UserDTOWIthCards> getAllUsersWithCardsFilteredBy(UserFilterRequest userFilterRequest, Pageable pageable);
+    public PageDTO<UserDTOWIthCards> getAllUsersWithCardsFilteredBy(UserFilterRequest userFilterRequest, Pageable pageable);
 
     public UserDTO updateUserById(Long userId, UserDTO userDTO);
 

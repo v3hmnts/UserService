@@ -1,5 +1,6 @@
 package UserService.service;
 
+import UserService.DTO.PageDTO;
 import UserService.DTO.PaymentCardDTO;
 import UserService.specification.PaymentCardFilterRequest;
 import org.springframework.data.domain.Page;
@@ -13,7 +14,7 @@ public interface IPaymentCardService {
 
     public PaymentCardDTO getPaymentCardById(Long paymentCardId);
 
-    public Page<PaymentCardDTO> getAllPaymentCardsFilteredBy(PaymentCardFilterRequest paymentCardFilterRequest, Pageable pageable);
+    public PageDTO<PaymentCardDTO> getAllPaymentCardsFilteredBy(PaymentCardFilterRequest paymentCardFilterRequest, Pageable pageable);
 
     public List<PaymentCardDTO> getAllPaymentCardsByUserId(Long userId);
 

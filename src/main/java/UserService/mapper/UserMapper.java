@@ -1,9 +1,12 @@
 package UserService.mapper;
 
+import UserService.DTO.PageDTO;
+import UserService.DTO.PaymentCardDTO;
 import UserService.DTO.UserDTO;
 import UserService.DTO.UserDTOWIthCards;
 import UserService.entity.User;
 import org.mapstruct.*;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -35,6 +38,12 @@ public interface UserMapper {
     void updateUserFromDTOWithCards(UserDTOWIthCards dto, @MappingTarget User user);
 
     UserDTO toDTOFromFullDTO(UserDTOWIthCards userDTOWIthCards);
+
+    @Mapping(source = "number", target = "size")
+    PageDTO<UserDTO> toUserDTOPage(Page<UserDTO> userDTOPage);
+
+    @Mapping(source = "number", target = "size")
+    PageDTO<UserDTOWIthCards> toUserDTOWithCardsPage(Page<UserDTOWIthCards> userDTOPage);
 
 
 }

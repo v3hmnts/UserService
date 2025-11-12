@@ -1,5 +1,6 @@
 package UserService.service;
 
+import UserService.DTO.PageDTO;
 import UserService.DTO.PaymentCardDTO;
 import UserService.entity.PaymentCard;
 import UserService.entity.User;
@@ -56,9 +57,10 @@ public class PaymentCardServiceImpl implements IPaymentCardService {
     }
 
     @Override
-    public Page<PaymentCardDTO> getAllPaymentCardsFilteredBy(PaymentCardFilterRequest paymentCardFilterRequest, Pageable pageable) {
+    public PageDTO<PaymentCardDTO> getAllPaymentCardsFilteredBy(PaymentCardFilterRequest paymentCardFilterRequest, Pageable pageable) {
         Page<PaymentCard> paymentCardPage = paymentCardRepository.findAll(paymentCardFilterRequest.toSpecification(), pageable);
-        return paymentCardPage.map((paymentCard) -> paymentCardMapper.toPaymentCardDTO(paymentCard));
+        Page<PaymentCardDTO> paymentCardDTOSPage = paymentCardPage.map((paymentCard) -> paymentCardMapper.toPaymentCardDTO(paymentCard));
+        return paymentCardMapper.toPaymentCardDTOPage(paymentCardDTOSPage);
     }
 
     @Override

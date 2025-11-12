@@ -1,5 +1,6 @@
 package UserService;
 
+import com.redis.testcontainers.RedisContainer;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Bean;
@@ -8,12 +9,20 @@ import org.testcontainers.utility.DockerImageName;
 import org.testcontainers.utility.MountableFile;
 
 @TestConfiguration(proxyBeanMethods = false)
-class TestcontainersConfiguration {
+public class TestcontainersConfiguration {
 
     @Bean
     @ServiceConnection
     PostgreSQLContainer<?> postgresContainer() {
         return new PostgreSQLContainer<>(DockerImageName.parse("postgres:latest")).withCopyFileToContainer(MountableFile.forClasspathResource("create-database.sql"),"docker-entrypoint-initdb.d/init.sql");
     }
+
+    @Bean
+    @ServiceConnection
+    RedisContainer redisContainer(){
+        return new RedisContainer("redis:latest")
+                .withExposedPorts(6379);
+    }
+
 
 }

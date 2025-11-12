@@ -1,5 +1,6 @@
 package UserService.controller;
 
+import UserService.DTO.PageDTO;
 import UserService.DTO.PaymentCardDTO;
 import UserService.DTO.UserDTO;
 import UserService.DTO.UserDTOWIthCards;
@@ -55,45 +56,45 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<UserDTO>> getAllUsers(@PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<UserDTO> users = userService.getAllUsers(pageable);
+    public ResponseEntity<PageDTO<UserDTO>> getAllUsers(@PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        PageDTO<UserDTO> users = userService.getAllUsers(pageable);
         return ResponseEntity.ok(users);
     }
 
     @GetMapping("/filtered")
-    public ResponseEntity<Page<UserDTO>> getAllUsersFilteredBy(
+    public ResponseEntity<PageDTO<UserDTO>> getAllUsersFilteredBy(
             @Valid UserFilterRequest userFilterRequest,
             @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<UserDTO> users = userService.getAllUsersFilteredBy(userFilterRequest, pageable);
+        PageDTO<UserDTO> users = userService.getAllUsersFilteredBy(userFilterRequest, pageable);
         return ResponseEntity.ok(users);
     }
 
     @GetMapping("/filtered/with-cards")
-    public ResponseEntity<Page<UserDTOWIthCards>> getAllUsersWithCardsFilteredBy(
+    public ResponseEntity<PageDTO<UserDTOWIthCards>> getAllUsersWithCardsFilteredBy(
             @Valid UserFilterRequest userFilterRequest,
             @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<UserDTOWIthCards> users = userService.getAllUsersWithCardsFilteredBy(userFilterRequest, pageable);
+        PageDTO<UserDTOWIthCards> users = userService.getAllUsersWithCardsFilteredBy(userFilterRequest, pageable);
         return ResponseEntity.ok(users);
     }
 
     @PutMapping("/{userId}")
-    public ResponseEntity<Void> updateUserById(
+    public ResponseEntity<UserDTO> updateUserById(
             @PathVariable Long userId,
             @Valid @RequestBody UserDTO userDTO) throws Exception {
-        userService.updateUserById(userId, userDTO);
-        return ResponseEntity.noContent().build();
+        UserDTO userDTOtoReturn = userService.updateUserById(userId, userDTO);
+        return ResponseEntity.ok(userDTOtoReturn);
     }
 
     @PatchMapping("/{userId}/deactivate")
-    public ResponseEntity<Void> deactivateUserById(@PathVariable Long userId) {
-        userService.deactivateUserById(userId);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<UserDTO> deactivateUserById(@PathVariable Long userId) {
+        UserDTO deactivatedUserDTO = userService.deactivateUserById(userId);
+        return ResponseEntity.ok(deactivatedUserDTO);
     }
 
     @PatchMapping("/{userId}/activate")
-    public ResponseEntity<Void> activateUserById(@PathVariable Long userId) {
-        userService.activateUserById(userId);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<UserDTO> activateUserById(@PathVariable Long userId) {
+        UserDTO deactivatedUserDTO = userService.activateUserById(userId);
+        return ResponseEntity.ok(deactivatedUserDTO);
     }
 
     @GetMapping("/{userId}/cards")

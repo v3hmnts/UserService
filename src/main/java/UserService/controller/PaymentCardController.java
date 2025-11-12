@@ -1,5 +1,6 @@
 package UserService.controller;
 
+import UserService.DTO.PageDTO;
 import UserService.DTO.PaymentCardDTO;
 import UserService.DTO.UserDTO;
 import UserService.service.IPaymentCardService;
@@ -39,10 +40,10 @@ public class PaymentCardController {
     }
 
     @GetMapping("/filtered")
-    public ResponseEntity<Page<PaymentCardDTO>> getAllPaymentCardsFilteredBy(
+    public ResponseEntity<PageDTO<PaymentCardDTO>> getAllPaymentCardsFilteredBy(
             @Valid PaymentCardFilterRequest paymentCardFilterRequest,
             @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<PaymentCardDTO> paymentCardDTOS = paymentCardService.getAllPaymentCardsFilteredBy(paymentCardFilterRequest, pageable);
+        PageDTO<PaymentCardDTO> paymentCardDTOS = paymentCardService.getAllPaymentCardsFilteredBy(paymentCardFilterRequest, pageable);
         return ResponseEntity.ok(paymentCardDTOS);
     }
 

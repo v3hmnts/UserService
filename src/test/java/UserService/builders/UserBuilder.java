@@ -9,7 +9,7 @@ import java.util.List;
 
 
 public class UserBuilder {
-    public long id;
+    public Long id;
     private String name;
     private String surname;
     private java.sql.Date birthDate;
