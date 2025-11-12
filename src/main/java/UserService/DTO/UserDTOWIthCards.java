@@ -8,13 +8,14 @@ import lombok.*;
 
 import java.sql.Date;
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode
 @ToString
+@Builder(toBuilder = true)
 public class UserDTOWIthCards {
 
     private Long id;

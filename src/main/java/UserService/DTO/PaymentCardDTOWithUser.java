@@ -1,15 +1,17 @@
 package UserService.DTO;
 
 import jakarta.persistence.Column;
-import jakarta.validation.constraints.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.*;
 
 import java.sql.Date;
-import java.util.UUID;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder(toBuilder = true)
 public class PaymentCardDTOWithUser {
 
     private Long id;
@@ -19,7 +21,7 @@ public class PaymentCardDTOWithUser {
     private UserDTO user;
 
     @NotBlank(message = "Payment card number shouldn't be blank")
-    @Size(min = 16,max = 16,message = "Credit card should have 16 digits number")
+    @Size(min = 16, max = 16, message = "Credit card should have 16 digits number")
     private String number;
 
     @NotBlank(message = "Holder name and surname is mandatory")

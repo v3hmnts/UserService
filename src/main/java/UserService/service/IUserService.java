@@ -1,32 +1,32 @@
 package UserService.service;
 
+import UserService.DTO.PageDTO;
+import UserService.DTO.PaymentCardDTO;
 import UserService.DTO.UserDTO;
 import UserService.DTO.UserDTOWIthCards;
 import UserService.specification.UserFilterRequest;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.UUID;
 
 public interface IUserService {
 
     public UserDTO addUser(UserDTO userDTO);
 
-    public UserDTO getUserById(UUID userId);
+    public UserDTOWIthCards addPaymentCardToUser(Long userId, PaymentCardDTO paymentCardDTO);
 
-    public UserDTOWIthCards getUserWithCardsById(UUID userId) ;
+    public UserDTO getUserById(Long userId);
 
-    public Page<UserDTO> getAllUsers(Pageable pageable);
+    public UserDTOWIthCards getUserWithCardsById(Long userId);
 
-    public Page<UserDTO> getAllUsersFilteredBy(UserFilterRequest userFilterRequest, Pageable pageable);
+    public PageDTO<UserDTO> getAllUsers(Pageable pageable);
 
-    public Page<UserDTOWIthCards> getAllUsersWithCardsFilteredBy(UserFilterRequest userFilterRequest, Pageable pageable);
+    public PageDTO<UserDTO> getAllUsersFilteredBy(UserFilterRequest userFilterRequest, Pageable pageable);
 
-    public UserDTO updateUserById(UUID userId, UserDTO userDTO);
+    public PageDTO<UserDTOWIthCards> getAllUsersWithCardsFilteredBy(UserFilterRequest userFilterRequest, Pageable pageable);
 
-    public UserDTO deactivateUserById(UUID userId);
+    public UserDTO updateUserById(Long userId, UserDTO userDTO);
 
-    public UserDTO activateUserById(UUID userId);
+    public UserDTO deactivateUserById(Long userId);
 
+    public UserDTO activateUserById(Long userId);
 
 }

@@ -1,5 +1,6 @@
 package UserService.entity;
 
+import UserService.exception.BusinessRuleConstraintViolationException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -14,60 +15,58 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", schema = "user_service")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+@ToString
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @NotBlank(message = "Name shouldn't be empty")
     @Size(min = 3, max = 100, message = "Name length should be between 3 and 100 characters")
     @Column(name = "name")
     private String name;
-
     @NotBlank(message = "Surname shouldn't be empty")
     @Size(min = 3, max = 100, message = "Surname length should be between 3 and 100 characters")
     @Column(name = "surname")
     private String surname;
-
     @Past
     @Column(name = "birth_date")
     private Date birthDate;
-
     @Email(message = "Email should be valid")
     @Size(min = 6, max = 255, message = "Email length should be between 6 and 255 characters")
     @Column(unique = true, name = "email")
     private String email;
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<PaymentCard> cards = new ArrayList<>();
-
     @Column(name = "active")
     private boolean active;
-
     @Column(name = "created_at", updatable = false)
     @CreatedDate
     private Timestamp createdAt;
-
     @Column(name = "updated_at")
     @LastModifiedDate
     private Timestamp updatedAt;
 
-    public void addPaymentCard(PaymentCard paymentCard) throws Exception {
-        if (this.cards == null) {
-            throw new Exception("User.cards shouldn't be null");
-        }
+    public User(Long id, String name, String surname, Date birthDate, String email, boolean active) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.birthDate = birthDate;
+        this.email = email;
+        this.active = active;
+    }
+
+    public void addPaymentCard(PaymentCard paymentCard) {
         if (this.cards.size() >= 5) {
-            throw new Exception("User should have no more than 5 payment cards");
+            throw new BusinessRuleConstraintViolationException("User should have no more than 5 payment cards");
         }
         this.cards.add(paymentCard);
         paymentCard.setUser(this);

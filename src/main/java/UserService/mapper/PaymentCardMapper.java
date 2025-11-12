@@ -1,9 +1,11 @@
 package UserService.mapper;
 
+import UserService.DTO.PageDTO;
 import UserService.DTO.PaymentCardDTO;
 import UserService.DTO.PaymentCardDTOWithUser;
 import UserService.entity.PaymentCard;
 import org.mapstruct.*;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -36,6 +38,10 @@ public interface PaymentCardMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "user", ignore = true)
     void updateFromDTOWithCards(PaymentCardDTOWithUser dto, @MappingTarget PaymentCard paymentCard);
+
+    @Mapping(source = "number", target = "size")
+    PageDTO<PaymentCardDTO> toPaymentCardDTOPage(Page<PaymentCardDTO> paymentCardDTOS);
 
 }
