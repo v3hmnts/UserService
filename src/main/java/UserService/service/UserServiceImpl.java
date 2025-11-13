@@ -21,7 +21,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -48,6 +47,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional
+    @CachePut(value = "UserDTO", key = "#result.id")
     public UserDTO addUser(@NotNull @Valid UserDTO userDTO) {
         userRepository.findByEmail(userDTO.getEmail()).ifPresent(user -> {
             throw new BusinessRuleConstraintViolationException(String.format("User with email %s already exists. Email should be unique", user.getEmail()));
@@ -57,14 +57,14 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    @Cacheable(value = "userDTO", key = "#userId")
+    @Cacheable(value = "UserDTO", key = "#userId")
     public UserDTO getUserById(Long userId) {
         User user = this.userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User", userId.toString()));
         return userMapper.toUserDTO(user);
     }
 
     @Override
-    @Cacheable(value = "userDTOWithCards", key = "#userId")
+    @Cacheable(value = "UserDTOWithCards", key = "#userId")
     public UserDTOWIthCards getUserWithCardsById(Long userId) {
         User user = this.userRepository.findWithCardsById(userId).orElseThrow(() -> new EntityNotFoundException("User", userId.toString()));
         return userMapper.toUserDTOWithCards(user, new CycleAvoidingMappingContext());
@@ -83,7 +83,7 @@ public class UserServiceImpl implements IUserService {
 
 
     @Transactional
-    @CachePut(value = "userDTOWithCards", key = "#result.id")
+    @CachePut(value = "UserDTOWithCards", key = "#result.id")
     public UserDTOWIthCards addPaymentCardToUser(Long userId, @NotNull @Valid PaymentCardDTO paymentCardDTO) {
         User user = userRepository.findWithCardsById(userId).orElseThrow(() -> new EntityNotFoundException("User", userId.toString()));
         paymentCardRepository.findByNumber(paymentCardDTO.getNumber()).ifPresent(paymentCard -> {
@@ -103,7 +103,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional
-    @CachePut(value = "userDTO", key = "#result.id")
+    @CachePut(value = "UserDTO", key = "#result.id")
     public UserDTO updateUserById(Long userId, @NotNull @Valid UserDTO userDTO) {
         User userToUpdate = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User", userId.toString()));
         userMapper.updateUserFromDTO(userDTO, userToUpdate);
@@ -112,7 +112,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional
-    @CachePut(value = "userDTO", key = "#result.id")
+    @CachePut(value = "UserDTO", key = "#result.id")
     public UserDTO deactivateUserById(Long userId) {
         userRepository.deactivateUserById(userId);
         return userMapper.toUserDTO(userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User", userId.toString())));
