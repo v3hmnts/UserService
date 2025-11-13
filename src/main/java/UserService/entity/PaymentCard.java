@@ -1,7 +1,9 @@
 package UserService.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -9,15 +11,15 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.UUID;
 
 @Entity
-@Table(name = "payment_cards")
+@Table(name = "payment_cards", schema = "user_service")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+@ToString
 public class PaymentCard {
 
     @Id
@@ -25,11 +27,13 @@ public class PaymentCard {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @JoinColumn(name = "user_id")
     private User user;
 
     @NotBlank
-    @Size(min = 16,max = 16,message = "Credit card should have 16 digits number")
+    @Size(min = 16, max = 16, message = "Credit card should have 16 digits number")
     @Column(unique = true, name = "number")
     private String number;
 
@@ -44,7 +48,7 @@ public class PaymentCard {
     @Column(name = "active")
     private boolean active;
 
-    @Column(name = "created_at",updatable = false)
+    @Column(name = "created_at", updatable = false)
     @CreatedDate
     private Timestamp createdAt;
 
