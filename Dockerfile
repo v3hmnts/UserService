@@ -10,6 +10,5 @@ COPY --from=build application/dependencies/ ./
 COPY --from=build application/spring-boot-loader/ ./
 COPY --from=build application/snapshot-dependencies/ ./
 COPY --from=build application/application/ ./
-ENV SPRING_PROFILES_ACTIVE="dev"
-ENTRYPOINT ["java", "org.springframework.boot.loader
-.JarLauncher","--spring.profiles.active=${SPRING_PROFILES_ACTIVE}"]
+ENV SPRING_PROFILES_ACTIVE="docker"
+ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher","--spring.profiles.active=${SPRING_PROFILES_ACTIVE}"]
