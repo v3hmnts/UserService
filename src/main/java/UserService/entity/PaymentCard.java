@@ -13,7 +13,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "payment_cards")
+@Table(name = "payment_cards", schema = "user_service")
 @Getter
 @Setter
 @NoArgsConstructor

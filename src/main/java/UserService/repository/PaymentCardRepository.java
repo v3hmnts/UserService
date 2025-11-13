@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
 
 public interface PaymentCardRepository extends JpaRepository<PaymentCard, Long>, JpaSpecificationExecutor<PaymentCard> {
 
@@ -26,5 +26,7 @@ public interface PaymentCardRepository extends JpaRepository<PaymentCard, Long>,
     @Modifying
     @Query(value = "UPDATE PaymentCard pc SET pc.active=true WHERE pc.id=:paymentCardId")
     public int activateCardById(@Param("paymentCardId") Long paymentCardId);
+
+    public Optional<PaymentCard> findByNumber(String cardNumber);
 
 }

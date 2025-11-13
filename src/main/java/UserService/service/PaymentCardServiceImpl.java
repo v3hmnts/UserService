@@ -1,22 +1,27 @@
 package UserService.service;
 
+import UserService.DTO.PageDTO;
 import UserService.DTO.PaymentCardDTO;
 import UserService.entity.PaymentCard;
+import UserService.entity.User;
+import UserService.exception.BusinessRuleConstraintViolationException;
 import UserService.exception.EntityNotFoundException;
 import UserService.mapper.PaymentCardMapper;
 import UserService.repository.PaymentCardRepository;
+import UserService.repository.UserRepository;
 import UserService.specification.PaymentCardFilterRequest;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @NoArgsConstructor
@@ -24,17 +29,21 @@ public class PaymentCardServiceImpl implements IPaymentCardService {
 
     PaymentCardRepository paymentCardRepository;
     PaymentCardMapper paymentCardMapper;
+    UserRepository userRepository;
 
     @Autowired
-    public PaymentCardServiceImpl(PaymentCardRepository paymentCardRepository, PaymentCardMapper paymentCardMapper) {
+    public PaymentCardServiceImpl(PaymentCardRepository paymentCardRepository, PaymentCardMapper paymentCardMapper, UserRepository userRepository) {
         this.paymentCardRepository = paymentCardRepository;
         this.paymentCardMapper = paymentCardMapper;
+        this.userRepository = userRepository;
     }
-
 
     @Override
     @Transactional
     public PaymentCardDTO addPaymentCard(@NotNull @Valid PaymentCardDTO paymentCardDTO) {
+        paymentCardRepository.findByNumber(paymentCardDTO.getNumber()).ifPresent(card -> {
+            throw new BusinessRuleConstraintViolationException(String.format("Payment card with number = %s already exist. Payment card number should be unique", card.getNumber()));
+        });
         PaymentCard paymentCard = paymentCardMapper.toEntity(paymentCardDTO);
         return paymentCardMapper.toPaymentCardDTO(paymentCardRepository.save(paymentCard));
     }
@@ -46,15 +55,16 @@ public class PaymentCardServiceImpl implements IPaymentCardService {
     }
 
     @Override
-    public Page<PaymentCardDTO> getAllPaymentCardsFilteredBy(PaymentCardFilterRequest paymentCardFilterRequest, Pageable pageable) {
+    public PageDTO<PaymentCardDTO> getAllPaymentCardsFilteredBy(PaymentCardFilterRequest paymentCardFilterRequest, Pageable pageable) {
         Page<PaymentCard> paymentCardPage = paymentCardRepository.findAll(paymentCardFilterRequest.toSpecification(), pageable);
-        return paymentCardPage.map((paymentCard) -> paymentCardMapper.toPaymentCardDTO(paymentCard));
+        Page<PaymentCardDTO> paymentCardDTOSPage = paymentCardPage.map((paymentCard) -> paymentCardMapper.toPaymentCardDTO(paymentCard));
+        return paymentCardMapper.toPaymentCardDTOPage(paymentCardDTOSPage);
     }
 
     @Override
     public List<PaymentCardDTO> getAllPaymentCardsByUserId(Long userId) {
-        List<PaymentCard> paymentCards = paymentCardRepository.findAllPaymentCardsByUserId(userId);
-        return paymentCardMapper.toPaymentCardDTOList(paymentCards);
+        User user = userRepository.findWithCardsById(userId).orElseThrow(() -> new EntityNotFoundException("User", userId.toString()));
+        return paymentCardMapper.toPaymentCardDTOList(user.getCards());
     }
 
     @Override
