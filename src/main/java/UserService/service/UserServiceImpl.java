@@ -47,7 +47,6 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional
-    @CachePut(value = "userDTO", key = "#result.id")
     public UserDTO addUser(@NotNull @Valid UserDTO userDTO) {
         userRepository.findByEmail(userDTO.getEmail()).ifPresent(user -> {
             throw new BusinessRuleConstraintViolationException(String.format("User with email %s already exists. Email should be unique", user.getEmail()));
