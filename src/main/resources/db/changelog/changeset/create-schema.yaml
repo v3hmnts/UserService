@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_user_service_schema
+      author: VHMNTS
+      changes:
+        - sql:
+            sql: CREATE SCHEMA IF NOT EXISTS user_service;
+        - sql:
+            sql: ALTER DATABASE user_service SET search_path TO user_service, public;
