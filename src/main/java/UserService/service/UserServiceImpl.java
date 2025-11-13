@@ -21,6 +21,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -47,7 +48,6 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional
-    @CachePut(value = "userDTO", key = "#result.id")
     public UserDTO addUser(@NotNull @Valid UserDTO userDTO) {
         userRepository.findByEmail(userDTO.getEmail()).ifPresent(user -> {
             throw new BusinessRuleConstraintViolationException(String.format("User with email %s already exists. Email should be unique", user.getEmail()));

@@ -40,7 +40,6 @@ public class PaymentCardServiceImpl implements IPaymentCardService {
 
     @Override
     @Transactional
-    @CachePut(value = "PaymentCardDTO", key = "#result.id")
     public PaymentCardDTO addPaymentCard(@NotNull @Valid PaymentCardDTO paymentCardDTO) {
         paymentCardRepository.findByNumber(paymentCardDTO.getNumber()).ifPresent(card -> {
             throw new BusinessRuleConstraintViolationException(String.format("Payment card with number = %s already exist. Payment card number should be unique", card.getNumber()));
